@@ -1,3 +1,70 @@
+
+/* --- Flex override for option row and word-tile expansion --- */
+.option-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    justify-content: center !important;
+    width: 100% !important;
+}
+
+.word-tile {
+    width: 80% !important;
+    margin-left: 10% !important;
+    margin-right: 10% !important;
+    min-width: 0 !important;
+    transition: width 0.2s;
+}
+
+.word-tile.correct {
+    width: 96% !important;
+    margin-left: 2% !important;
+    margin-right: 2% !important;
+    z-index: 2;
+    transition: width 0.2s;
+}
+.level-circle.wrong {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    border-color: #fa709a;
+    box-shadow: 0 2px 8px rgba(250,112,154,0.18);
+}
+/* Level Progress Bar Styles */
+.level-progress-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    margin-top: 8px;
+    min-height: 32px;
+}
+
+.level-circle {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    border: 2px solid #e0e0e0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: background 0.2s, border 0.2s, box-shadow 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.level-circle.completed {
+    background: #43e97b;
+    border-color: #43e97b;
+    box-shadow: 0 2px 8px rgba(67,233,123,0.18);
+}
+.level-circle.current {
+    background: #fff;
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102,126,234,0.18);
+}
+.level-circle.uncompleted {
+    background: #e0e0e0;
+    border-color: #e0e0e0;
+}
 /* Info Button */
 /* Info Button Circle */
 .info-btn {
@@ -180,10 +247,6 @@ header h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 80%;
-    max-width: none;
-    margin-left: 10%;
-    margin-right: 10%;
     min-width: 0;
 }
 
@@ -207,10 +270,17 @@ header h1 {
 
 .word-tile.correct {
     background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    flex: 1.8 1 0 !important;
+    z-index: 2;
+    transition: flex 0.2s;
 }
 
 .word-tile.incorrect {
     background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    width: 80% !important;
+    margin-left: 10% !important;
+    margin-right: 10% !important;
+    transition: none;
 }
 
 .word-text {

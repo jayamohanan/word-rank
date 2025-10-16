@@ -3,6 +3,10 @@ let wordsData = [];
 let currentRound = 1;
 let currentWords = [];
 let isAnswered = false;
+let levelResults = []; // true for correct, false for incorrect
+
+// Level Progress Bar State
+const LEVELS_PER_SET = 10;
 
 // DOM Elements
 const word1Btn = document.getElementById('word1');
@@ -11,6 +15,12 @@ const word3Btn = document.getElementById('word3');
 const feedbackDiv = document.getElementById('feedback');
 const nextBtn = document.getElementById('nextBtn');
 const roundNumber = document.getElementById('roundNumber');
+const levelProgressBar = document.getElementById('levelProgressBar');
+const summaryModal = document.getElementById('summaryModal');
+const summaryScore = document.getElementById('summaryScore');
+const summaryCorrect = document.getElementById('summaryCorrect');
+const summaryWrong = document.getElementById('summaryWrong');
+const summaryCloseBtn = document.getElementById('summaryCloseBtn');
 
 // Initialize Game
 async function initGame() {
@@ -38,6 +48,32 @@ function toTitleCase(str) {
     if (!str) return '';
     console.log('will return ', (str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()));
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+// Render the level progress bar for the current set
+function renderLevelProgressBar() {
+    if (!levelProgressBar) return;
+    const setStart = Math.floor((currentRound - 1) / LEVELS_PER_SET) * LEVELS_PER_SET + 1;
+    const setEnd = setStart + LEVELS_PER_SET - 1;
+    levelProgressBar.innerHTML = '';
+    for (let i = setStart; i <= setEnd; i++) {
+        const circle = document.createElement('div');
+        circle.classList.add('level-circle');
+        if (i < currentRound) {
+            if (levelResults[i-1] === true) {
+                circle.classList.add('completed');
+            } else if (levelResults[i-1] === false) {
+                circle.classList.add('wrong');
+            } else {
+                circle.classList.add('uncompleted');
+            }
+        } else if (i === currentRound) {
+            circle.classList.add('current');
+        } else {
+            circle.classList.add('uncompleted');
+        }
+        levelProgressBar.appendChild(circle);
+    }
 }
 
 // Start a new round
@@ -73,6 +109,9 @@ function startNewRound() {
 
     // Update round number
     roundNumber.textContent = currentRound;
+
+    // Update level progress bar
+    renderLevelProgressBar();
 }
 
 // Handle word selection
@@ -86,9 +125,13 @@ function handleWordClick(selectedIndex) {
     const correctIndex = currentWords.reduce((minIdx, word, idx, arr) => word.rank < arr[minIdx].rank ? idx : minIdx, 0);
     const isCorrect = selectedIndex === correctIndex;
 
+    // Track result for progress bar
+    levelResults[currentRound - 1] = isCorrect;
+
     // Sort words by rank ascending
     const sortedWords = [...currentWords].sort((a, b) => a.rank - b.rank);
-    let rankHtml = '<div class="rank-list-horizontal" style="margin-top:10px;font-size:0.95rem;color:#888;font-weight:normal;text-align:center;">';
+    let rankHtml = '<div style="margin-top:10px;font-size:0.98rem;color:#555;font-weight:bold;text-align:center;">Word Frequency Rank</div>';
+    rankHtml += '<div class="rank-list-horizontal" style="margin-top:2px;font-size:0.95rem;color:#888;font-weight:normal;text-align:center;">';
     for (let i = 0; i < sortedWords.length; i++) {
         rankHtml += `${toTitleCase(sortedWords[i].lemma)} - ${sortedWords[i].rank}`;
         if (i < sortedWords.length - 1) rankHtml += ' &bull; ';
@@ -97,10 +140,10 @@ function handleWordClick(selectedIndex) {
 
     // Update UI based on result
     if (isCorrect) {
-        feedbackDiv.innerHTML = '✓ Correct!';
+        feedbackDiv.innerHTML = '\u2713 Correct!';
         feedbackDiv.className = 'feedback correct';
     } else {
-        feedbackDiv.innerHTML = '✗ Wrong!';
+        feedbackDiv.innerHTML = '\u2717 Wrong!';
         feedbackDiv.className = 'feedback incorrect';
     }
     // Show ranks at bottom in requested horizontal format
@@ -126,12 +169,48 @@ function handleWordClick(selectedIndex) {
 
     // Show next button
     nextBtn.style.display = 'inline-block';
+
+    // Update progress bar
+    renderLevelProgressBar();
 }
 
 // Handle next button click
 function handleNextClick() {
     currentRound++;
-    startNewRound();
+    // If finished 10 rounds, show summary
+    if ((currentRound-1) % LEVELS_PER_SET === 0) {
+        showSummaryModal();
+    } else {
+        startNewRound();
+    }
+}
+
+function showSummaryModal() {
+    // Calculate score
+    const setStart = Math.floor((currentRound - 2) / LEVELS_PER_SET) * LEVELS_PER_SET;
+    const setEnd = setStart + LEVELS_PER_SET;
+    let correct = 0, wrong = 0;
+    for (let i = setStart; i < setEnd; i++) {
+        if (levelResults[i] === true) correct++;
+        else if (levelResults[i] === false) wrong++;
+    }
+    summaryScore.textContent = `Score: ${correct} / 10`;
+    summaryCorrect.textContent = `Correct: ${correct}`;
+    summaryWrong.textContent = `Wrong: ${wrong}`;
+    summaryModal.style.display = 'flex';
+    // Hide game area
+    document.getElementById('gameArea').style.display = 'none';
+    levelProgressBar.style.display = 'none';
+}
+
+if (summaryCloseBtn) {
+    summaryCloseBtn.onclick = function() {
+        summaryModal.style.display = 'none';
+        // Optionally reset for next set
+        document.getElementById('gameArea').style.display = '';
+        levelProgressBar.style.display = '';
+        startNewRound();
+    };
 }
 
 // Event Listeners
