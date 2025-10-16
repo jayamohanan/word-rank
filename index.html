@@ -8,19 +8,61 @@
 </head>
 <body>
     <div class="container">
+        <div class="top-bar">
+            <button class="info-btn" aria-label="Info" id="infoBtn">
+                <span class="info-circle">?</span>
+            </button>
+        </div>
         <header>
-            <h1>Word Popularity Picker</h1>
-            <p class="instructions">Which word is more popular?</p>
+            <h1>Most Used Word</h1>
         </header>
+        <div class="instructions" style="margin-bottom: 28px; margin-top: 10px;">
+            Guess the most commonly used word in English?
+        </div>
+
+        <!-- Info Popup Modal -->
+        <div id="infoModal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span id="closeModal" class="close">&times;</span>
+                <h2>About Word Frequency</h2>
+                <p>
+                    This game is based on the <b>COCA_WordFrequency</b> list, downloaded from a public website. The list ranks English words by how often they are used in real-world texts.<br><br>
+                    <b>"Most frequently used"</b> means the word appears more often in English writing and speech, according to the COCA (Corpus of Contemporary American English) database.<br><br>
+                    Below is a sample of the first 200 words and their ranks. Scroll to see more!
+                </p>
+                <div class="table-container">
+                    <table id="wordTable">
+                        <thead>
+                            <tr><th>Rank</th><th>Word</th></tr>
+                        </thead>
+                        <tbody>
+                            <!-- Table rows will be inserted by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
         <main id="gameArea">
             <div class="word-tiles" id="wordTiles">
-                <button class="word-tile" id="word1" disabled>
-                    <span class="word-text"></span>
-                </button>
-                <button class="word-tile" id="word2" disabled>
-                    <span class="word-text"></span>
-                </button>
+                <div class="option-row">
+                    <button id="word1" class="word-tile" disabled>
+                        <span class="word-text"></span>
+                    </button>
+                    <span id="icon1"></span>
+                </div>
+                <div class="option-row">
+                    <button id="word2" class="word-tile" disabled>
+                        <span class="word-text"></span>
+                    </button>
+                    <span id="icon2"></span>
+                </div>
+                <div class="option-row">
+                    <button id="word3" class="word-tile" disabled>
+                        <span class="word-text"></span>
+                    </button>
+                    <span id="icon3"></span>
+                </div>
             </div>
 
             <div class="feedback" id="feedback"></div>

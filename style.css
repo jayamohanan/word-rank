@@ -1,3 +1,111 @@
+/* Info Button */
+/* Info Button Circle */
+.info-btn {
+    position: relative;
+    top: 0;
+    right: 0;
+    margin-right: 2px;
+    margin-top: 2px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 10;
+    outline: none;
+    padding: 0;
+}
+/* Ensure header is positioned relative for absolute icon placement */
+.container header {
+    position: static;
+}
+
+.info-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #eef2ff;
+    color: #667eea;
+    font-size: 1.5rem;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(102,126,234,0.08);
+    border: 2px solid #667eea;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+.info-btn:focus .info-circle,
+.info-btn:hover .info-circle {
+    background: #667eea;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(102,126,234,0.18);
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #fff;
+    margin: 40px auto;
+    padding: 30px 20px;
+    border-radius: 16px;
+    max-width: 350px;
+    width: 90vw;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 18px;
+    font-size: 2rem;
+    color: #667eea;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.table-container {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 18px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background: #fafafa;
+}
+
+#wordTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+}
+
+#wordTable th, #wordTable td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: left;
+}
+
+#wordTable th {
+    background: #667eea;
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
 * {
     margin: 0;
     padding: 0;
@@ -14,14 +122,23 @@ body {
     padding: 20px;
 }
 
+
 .container {
     background: white;
     border-radius: 20px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    max-width: 500px;
+    aspect-ratio: 9 / 16;
     width: 100%;
+    max-width: 400px;
+    min-width: 240px;
+    min-height: 427px; /* 240 * 16 / 9 = 427 */
+    max-height: 711px; /* 400 * 16 / 9 = 711 */
+    height: auto;
     padding: 40px 30px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 header h1 {
@@ -33,31 +150,41 @@ header h1 {
 .instructions {
     color: #666;
     font-size: 1rem;
-    margin-bottom: 30px;
+    margin-bottom: 8px;
+    margin-top: 10px;
 }
+
 
 .word-tiles {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 19px;
     margin-bottom: 30px;
 }
 
+/* Removed horizontal layout for word tiles. They will always be vertical. */
+
 .word-tile {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #fff;
     border: none;
     border-radius: 15px;
-    padding: 30px 20px;
+    padding: 16px 20px;
     font-size: 1.5rem;
     font-weight: bold;
-    color: white;
+    color: #333;
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    min-height: 100px;
+    min-height: 48px;
+    max-height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 80%;
+    max-width: none;
+    margin-left: 10%;
+    margin-right: 10%;
+    min-width: 0;
 }
 
 .word-tile:not(:disabled):hover {
@@ -79,7 +206,7 @@ header h1 {
 }
 
 .word-tile.correct {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
 }
 
 .word-tile.incorrect {
@@ -88,7 +215,26 @@ header h1 {
 
 .word-text {
     font-size: 1.8rem;
-    text-transform: lowercase;
+    text-transform: none;
+}
+
+.word-rank {
+    display: block;
+    font-size: 1rem;
+    color: #888;
+    font-weight: normal;
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+}
+
+.word-rank-top {
+    display: none;
+    font-size: 1rem;
+    color: #888;
+    font-weight: normal;
+    margin-bottom: 2px;
+    margin-top: 0;
+    letter-spacing: 0.5px;
 }
 
 .feedback {
@@ -148,6 +294,102 @@ footer {
     font-weight: bold;
 }
 
+/* Rank List Styles */
+.rank-list {
+    margin-top: 10px;
+    line-height: 1.3;
+    font-size: 0.95rem;
+    color: #888;
+    font-weight: normal;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    width: 100%;
+    justify-content: center;
+}
+.rank-list > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 220px;
+}
+.rank-list span {
+    min-width: 90px;
+    display: inline-block;
+    text-align: right;
+}
+.rank-list span:last-child {
+    min-width: 40px;
+    text-align: left;
+}
+
+.rank-list-horizontal {
+    margin-top: 10px;
+    font-size: 0.95rem;
+    color: #888;
+    font-weight: normal;
+    text-align: center;
+    width: 100%;
+    white-space: normal;
+}
+
+/* Icon Styles */
+.icon-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+    margin-right: 0;
+    vertical-align: middle;
+}
+
+.correct-icon svg {
+    display: block;
+}
+
+.wrong-icon svg {
+    display: block;
+}
+
+/* Option Row Styles */
+.option-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.option-row .icon-circle {
+    margin-left: 10px;
+    margin-right: 0;
+    min-width: 22px;
+    min-height: 22px;
+    height: 22px;
+    width: 22px;
+    box-sizing: content-box;
+    visibility: hidden;
+}
+.option-row .icon-circle.visible {
+    visibility: visible;
+}
+
+/* Top Bar Styles */
+.top-bar {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    height: 36px;
+    position: relative;
+    margin-bottom: 2px;
+    padding-top: 0;
+    padding-right: 0;
+    background: #e0ffe0;
+    /* debug color */
+}
+
 /* Responsive Design */
 @media (max-width: 600px) {
     .container {
@@ -160,6 +402,7 @@ footer {
 
     .word-text {
         font-size: 1.4rem;
+        text-transform: none;
     }
 
     .word-tile {
@@ -184,6 +427,7 @@ footer {
 
     .word-text {
         font-size: 1.2rem;
+        text-transform: none;
     }
 
     .word-tile {
