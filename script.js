@@ -56,24 +56,36 @@ function renderLevelProgressBar() {
     const setStart = Math.floor((currentRound - 1) / LEVELS_PER_SET) * LEVELS_PER_SET + 1;
     const setEnd = setStart + LEVELS_PER_SET - 1;
     levelProgressBar.innerHTML = '';
-    for (let i = setStart; i <= setEnd; i++) {
-        const circle = document.createElement('div');
-        circle.classList.add('level-circle');
-        if (i < currentRound) {
-            if (levelResults[i-1] === true) {
-                circle.classList.add('completed');
-            } else if (levelResults[i-1] === false) {
-                circle.classList.add('wrong');
-            } else {
-                circle.classList.add('uncompleted');
-            }
-        } else if (i === currentRound) {
-            circle.classList.add('current');
-        } else {
-            circle.classList.add('uncompleted');
+        for (let i = setStart; i <= setEnd; i++) {
+                const circle = document.createElement('div');
+                circle.classList.add('level-circle');
+                if (i < currentRound) {
+                        if (levelResults[i-1] === true) {
+                                circle.classList.add('completed');
+                                // Add white tick SVG
+                                circle.innerHTML = `<span class='progress-icon'>
+                                    <svg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'>
+                                        <path d='M3.5 7.5L6 10L10.5 4' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/>
+                                    </svg>
+                                </span>`;
+                        } else if (levelResults[i-1] === false) {
+                                circle.classList.add('wrong');
+                                // Add white X SVG
+                                circle.innerHTML = `<span class='progress-icon'>
+                                    <svg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'>
+                                        <path d='M4 4L10 10M10 4L4 10' stroke='white' stroke-width='2.2' stroke-linecap='round'/>
+                                    </svg>
+                                </span>`;
+                        } else {
+                                circle.classList.add('uncompleted');
+                        }
+                } else if (i === currentRound) {
+                        circle.classList.add('current');
+                } else {
+                        circle.classList.add('uncompleted');
+                }
+                levelProgressBar.appendChild(circle);
         }
-        levelProgressBar.appendChild(circle);
-    }
 }
 
 // Start a new round

@@ -38,15 +38,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 12px;
+    gap: 2px;
     margin-bottom: 18px;
     margin-top: 8px;
-    min-height: 32px;
+    min-height: 22px;
 }
 
 .level-circle {
-    width: 22px;
-    height: 22px;
+    width: 15px;
+    height: 15px;
     border-radius: 50%;
     background: #e0e0e0;
     border: 2px solid #e0e0e0;
@@ -216,8 +216,11 @@ body {
 header h1 {
     color: #333;
     font-size: 2rem;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
 }
+    /* Add margin below title */
+    margin-top: 0;
+    margin-bottom: 10px;
 
 .instructions {
     color: #666;
@@ -274,14 +277,14 @@ header h1 {
 }
 
 .word-tile.correct {
-    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    background: #43e97b;
     flex: 1.8 1 0 !important;
     z-index: 2;
     transition: flex 0.2s;
 }
 
 .word-tile.incorrect {
-    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    background: #fa709a;
     width: 80% !important;
     margin-left: 10% !important;
     margin-right: 10% !important;
