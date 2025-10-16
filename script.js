@@ -1,3 +1,133 @@
+// Persistent level tracker
+function getCurrentLevel() {
+    return parseInt(localStorage.getItem('currentLevel') || '1', 10);
+}
+function setCurrentLevel(level) {
+    localStorage.setItem('currentLevel', level);
+}
+// Achievements definitions
+// Level Progress Bar State
+const LEVELS_PER_SET = 10;
+const ACHIEVEMENTS = [
+  {
+    id: 'first_game',
+    name: 'First Game',
+    desc: 'Complete your first game.',
+    check: freq => freq.totalGames >= 1,
+    icon: '🏅',
+  },
+  {
+    id: 'score_5',
+    name: 'Solid Start',
+    desc: 'Score 5 or more in a game 5 times.',
+    check: freq => freq[5] + freq[6] + freq[7] + freq[8] + freq[9] + freq[10] >= 5,
+    icon: '🎯',
+  },
+  {
+    id: 'score_8',
+    name: 'Word Master',
+    desc: 'Score 8 or more in a game 10 times.',
+    check: freq => freq[8] + freq[9] + freq[10] >= 10,
+    icon: '🏆',
+  },
+  {
+    id: 'perfect_10',
+    name: 'Perfectionist',
+    desc: 'Score 10/10 in a game 5 times.',
+    check: freq => freq[10] >= 5,
+    icon: '🌟',
+  },
+  {
+    id: 'streak_5',
+    name: 'Hot Streak',
+    desc: 'Get 5 correct answers in a row.',
+    check: freq => freq.maxStreak >= 5,
+    icon: '🔥',
+  },
+  {
+    id: 'streak_10',
+    name: 'Unstoppable',
+    desc: 'Get 10 correct answers in a row.',
+    check: freq => freq.maxStreak >= 10,
+    icon: '💥',
+  },
+];
+
+function getScoreFrequency() {
+    let freq = JSON.parse(localStorage.getItem('scoreFrequency') || '{}');
+    for (let i = 0; i <= 10; i++) {
+        if (typeof freq[i] !== 'number') freq[i] = 0;
+    }
+    freq.totalGames = Object.values(freq).slice(0, 11).reduce((a, b) => a + b, 0);
+    freq.maxStreak = parseInt(localStorage.getItem('maxStreak') || '0', 10);
+    return freq;
+}
+
+function unlockAchievements() {
+    const freq = getScoreFrequency();
+    let unlocked = JSON.parse(localStorage.getItem('achievementsUnlocked') || '{}');
+    let newlyUnlocked = [];
+    ACHIEVEMENTS.forEach(a => {
+        if (a.check(freq) && !unlocked[a.id]) {
+            unlocked[a.id] = true;
+            newlyUnlocked.push(a);
+        }
+    });
+    localStorage.setItem('achievementsUnlocked', JSON.stringify(unlocked));
+    return newlyUnlocked;
+}
+
+function renderAchievementsBoard() {
+    const freq = getScoreFrequency();
+    const unlocked = JSON.parse(localStorage.getItem('achievementsUnlocked') || '{}');
+    const list = document.getElementById('achievementsList');
+    if (!list) return;
+    list.innerHTML = '';
+    ACHIEVEMENTS.forEach(a => {
+        // Only show highest relevant achievement for score milestones
+        if (['score_5', 'score_8', 'perfect_10'].includes(a.id)) {
+            if (unlocked['perfect_10'] && a.id !== 'perfect_10') return;
+            if (unlocked['score_8'] && a.id === 'score_5') return;
+        }
+        const div = document.createElement('div');
+        div.className = 'achievement' + (unlocked[a.id] ? ' unlocked' : '');
+        div.innerHTML = `
+            <span class="achievement-icon">${a.icon}</span>
+            <span>
+                <strong>${a.name}</strong><br>
+                <span style="font-size:0.95rem;">${a.desc}</span>
+            </span>
+            <span class="achievement-progress">
+                ${unlocked[a.id] ? 'Unlocked' : achievementProgressText(a, freq)}
+            </span>
+        `;
+        list.appendChild(div);
+    });
+}
+
+function achievementProgressText(a, freq) {
+    if (a.id === 'first_game') return `${freq.totalGames}/1`;
+    if (a.id === 'score_5') return `${freq[5] + freq[6] + freq[7] + freq[8] + freq[9] + freq[10]}/5`;
+    if (a.id === 'score_8') return `${freq[8] + freq[9] + freq[10]}/10`;
+    if (a.id === 'perfect_10') return `${freq[10]}/5`;
+    if (a.id === 'streak_5') return `${freq.maxStreak}/5`;
+    if (a.id === 'streak_10') return `${freq.maxStreak}/10`;
+    return '';
+}
+
+// Track streaks
+let currentStreak = 0;
+function updateStreak(isCorrect) {
+    if (isCorrect) {
+        currentStreak++;
+        let maxStreak = parseInt(localStorage.getItem('maxStreak') || '0', 10);
+        if (currentStreak > maxStreak) {
+            localStorage.setItem('maxStreak', currentStreak);
+        }
+    } else {
+        currentStreak = 0;
+    }
+}
 // Persistent score frequency tracking
 function updateScoreFrequency(score) {
     let freq = JSON.parse(localStorage.getItem('scoreFrequency') || '{}');
@@ -9,13 +139,12 @@ function updateScoreFrequency(score) {
 }
 // Game State
 let wordsData = [];
-let currentRound = 1;
+let currentLevel = getCurrentLevel();
+let currentRound = (currentLevel - 1) * LEVELS_PER_SET + 1;
 let currentWords = [];
 let isAnswered = false;
 let levelResults = []; // true for correct, false for incorrect
 
-// Level Progress Bar State
-const LEVELS_PER_SET = 10;
 
 // DOM Elements
 const word1Btn = document.getElementById('word1');
@@ -99,6 +228,9 @@ function renderLevelProgressBar() {
 
 // Start a new round
 function startNewRound() {
+    // Update level number in UI
+    const levelNumberDiv = document.getElementById('levelNumber');
+    if (levelNumberDiv) levelNumberDiv.textContent = `Level ${currentLevel}`;
     // Reset state
     isAnswered = false;
     currentWords = getRandomWords();
@@ -128,8 +260,6 @@ function startNewRound() {
     // Hide next button
     nextBtn.style.display = 'none';
 
-    // Update round number
-    roundNumber.textContent = currentRound;
 
     // Update level progress bar
     renderLevelProgressBar();
@@ -149,12 +279,15 @@ function handleWordClick(selectedIndex) {
     // Track result for progress bar
     levelResults[currentRound - 1] = isCorrect;
 
+    // Track streaks
+    updateStreak(isCorrect);
+
     // Sort words by rank ascending
     const sortedWords = [...currentWords].sort((a, b) => a.rank - b.rank);
     let rankHtml = '<div style="margin-top:10px;font-size:0.98rem;color:#555;font-weight:bold;text-align:center;">Word Frequency Rank</div>';
     rankHtml += '<div class="rank-list-horizontal" style="margin-top:2px;font-size:0.95rem;color:#888;font-weight:normal;text-align:center;">';
     for (let i = 0; i < sortedWords.length; i++) {
-        rankHtml += `${toTitleCase(sortedWords[i].lemma)} - ${sortedWords[i].rank}`;
+        rankHtml += `${toTitleCase(sortedWords[i].lemma)} #${sortedWords[i].rank}`;
         if (i < sortedWords.length - 1) rankHtml += ' &bull; ';
     }
     rankHtml += '</div>';
@@ -217,13 +350,128 @@ function showSummaryModal() {
     }
     // Update persistent score frequency
     updateScoreFrequency(correct);
-    summaryScore.textContent = `Score: ${correct} / 10`;
-    summaryCorrect.textContent = `Correct: ${correct}`;
-    summaryWrong.textContent = `Wrong: ${wrong}`;
-    summaryModal.style.display = 'flex';
+    // Unlock achievements and show unlocked achievement if any
+    const newlyUnlocked = unlockAchievements();
+    if (newlyUnlocked.length > 0) {
+        // Show achievement unlocked in summary modal
+        const achievement = newlyUnlocked[newlyUnlocked.length - 1];
+        const achievementDiv = document.createElement('div');
+        achievementDiv.style = 'margin:18px 0 0 0;padding:12px 0;border-radius:10px;background:#fffbe6;color:#333;font-weight:bold;display:flex;align-items:center;gap:12px;justify-content:center;';
+        achievementDiv.innerHTML = `<span style='font-size:1.6rem;'>${achievement.icon}</span> <span>Achievement Unlocked: ${achievement.name}</span>`;
+        summaryModal.querySelector('.modal-content').appendChild(achievementDiv);
+    }
+    // Only increment level if score >= 5
+    if (correct >= 5) {
+        currentLevel++;
+        setCurrentLevel(currentLevel);
+    }
+// Achievements modal logic
+const trophyBtn = document.getElementById('trophyBtn');
+const achievementsModal = document.getElementById('achievementsModal');
+const closeAchievements = document.getElementById('closeAchievements');
+
+if (trophyBtn) {
+    trophyBtn.addEventListener('click', function() {
+        achievementsModal.style.display = 'flex';
+        renderAchievementsBoard();
+    });
+}
+if (closeAchievements) {
+    closeAchievements.addEventListener('click', function() {
+        achievementsModal.style.display = 'none';
+    });
+}
+window.addEventListener('click', function(e) {
+    if (e.target === achievementsModal) {
+        achievementsModal.style.display = 'none';
+    }
+});
     // Hide game area
     document.getElementById('gameArea').style.display = 'none';
     levelProgressBar.style.display = 'none';
+    const modalContent = summaryModal.querySelector('.modal-content');
+    // Clear previous modal content except static elements
+    const title = modalContent.querySelector('h2');
+    if (title) title.textContent = correct < 5 ? 'Level Failed' : 'Level Complete!';
+    summaryScore.textContent = `Score: ${correct} / 10`;
+    summaryCorrect.textContent = '';
+    summaryWrong.textContent = '';
+    // Remove any previous custom elements (failMsg, retryBtn, achievementDiv, circles)
+    Array.from(modalContent.querySelectorAll('.summary-extra')).forEach(e => e.remove());
+
+    // Add score too low message if failed
+    if (correct < 5) {
+        const failMsg = document.createElement('div');
+        failMsg.className = 'summary-extra';
+        failMsg.style = 'margin:10px 0 0 0;font-size:1.1rem;color:#b71c1c;font-weight:bold;text-align:center;';
+        failMsg.textContent = 'Score too low. Try again!';
+        modalContent.appendChild(failMsg);
+    }
+
+    // Add circles for each question (correct/wrong) BELOW the score label
+    const circlesDiv = document.createElement('div');
+    circlesDiv.className = 'summary-extra';
+    circlesDiv.style = 'display:flex;justify-content:center;gap:6px;margin:12px 0 0 0;';
+    for (let i = setStart; i < setEnd; i++) {
+        const circle = document.createElement('div');
+        circle.style = 'width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.08);border:2px solid #bbb;';
+        if (levelResults[i] === true) {
+            circle.style.background = '#43e97b';
+            circle.style.borderColor = '#43e97b';
+            circle.innerHTML = `<span style='color:white;font-size:1.1rem;'>&#10003;</span>`;
+        } else if (levelResults[i] === false) {
+            circle.style.background = 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)';
+            circle.style.borderColor = '#fa709a';
+            circle.innerHTML = `<span style='color:white;font-size:1.1rem;'>&#10007;</span>`;
+        } else {
+            circle.style.background = 'transparent';
+            circle.innerHTML = '';
+        }
+        circlesDiv.appendChild(circle);
+    }
+    // Insert circlesDiv after summaryScore
+    if (summaryScore && summaryScore.parentNode) {
+        summaryScore.parentNode.insertBefore(circlesDiv, summaryScore.nextSibling);
+    } else {
+        modalContent.appendChild(circlesDiv);
+    }
+
+    // Add Retry button if failed
+    if (correct < 5) {
+        const retryBtn = document.createElement('button');
+        retryBtn.className = 'summary-extra';
+        retryBtn.textContent = 'Retry';
+        retryBtn.style = 'margin-top:16px;padding:10px 30px;border-radius:8px;background:#b71c1c;color:#fff;font-weight:bold;border:none;cursor:pointer;font-size:1.1rem;';
+        retryBtn.onclick = function() {
+            summaryModal.style.display = 'none';
+            document.getElementById('gameArea').style.display = '';
+            levelProgressBar.style.display = '';
+            currentRound = (currentLevel - 1) * LEVELS_PER_SET + 1;
+            startNewRound();
+        };
+        modalContent.appendChild(retryBtn);
+    } else {
+        // Add Next button if level completed
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'summary-extra';
+        nextBtn.textContent = 'Next';
+        nextBtn.style = 'margin-top:16px;padding:10px 30px;border-radius:8px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;font-weight:bold;border:none;cursor:pointer;font-size:1.1rem;';
+        nextBtn.onclick = function() {
+            summaryModal.style.display = 'none';
+            document.getElementById('gameArea').style.display = '';
+            levelProgressBar.style.display = '';
+            // Start next level from beginning
+            currentRound = (currentLevel - 1) * LEVELS_PER_SET + 1;
+            startNewRound();
+        };
+        modalContent.appendChild(nextBtn);
+    }
+
+    // Remove the close button if present
+    const closeBtn = modalContent.querySelector('#summaryCloseBtn');
+    if (closeBtn) closeBtn.style.display = 'none';
+
+    summaryModal.style.display = 'flex';
 }
 
 if (summaryCloseBtn) {
@@ -232,6 +480,8 @@ if (summaryCloseBtn) {
         // Optionally reset for next set
         document.getElementById('gameArea').style.display = '';
         levelProgressBar.style.display = '';
+        // Start next level from beginning
+        currentRound = (currentLevel - 1) * LEVELS_PER_SET + 1;
         startNewRound();
     };
 }
@@ -274,5 +524,6 @@ window.addEventListener('click', function(e) {
     }
 });
 
+// Start the game
 // Start the game
 initGame();

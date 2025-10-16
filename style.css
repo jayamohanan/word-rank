@@ -1,3 +1,95 @@
+/* Trophy Button Styles */
+.trophy-btn {
+    position: relative;
+    top: 0;
+    right: 0;
+    margin-right: 8px;
+    margin-top: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 10;
+    outline: none;
+    padding: 0;
+}
+.trophy-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fffbe6;
+    color: #FFD700;
+    font-size: 1.5rem;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(255,215,0,0.08);
+    border: 2px solid #FFD700;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+.trophy-btn:focus .trophy-circle,
+.trophy-btn:hover .trophy-circle {
+    background: #FFD700;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(255,215,0,0.18);
+}
+.trophy-btn:hover .trophy-circle svg path,
+.trophy-btn:focus .trophy-circle svg path {
+    stroke: #fff !important;
+    fill: #fff !important;
+}
+/* Achievements Modal Styles */
+#achievementsModal .modal-content {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    padding: 30px 20px;
+    max-width: 340px;
+    width: 90vw;
+    position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+#achievementsList {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.achievement {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+.achievement:last-child {
+    border-bottom: none;
+}
+.achievement-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: #bbb;
+}
+.achievement.unlocked .achievement-icon {
+    background: #FFD700;
+    color: #fff;
+}
+.achievement.unlocked {
+    font-weight: bold;
+    color: #333;
+}
+.achievement-progress {
+    font-size: 0.95rem;
+    color: #888;
+    margin-left: auto;
+}
 /* --- Flex override for option row and word-tile expansion --- */
 .option-row {
     display: flex !important;
@@ -462,8 +554,7 @@ footer {
     margin-bottom: 2px;
     padding-top: 0;           /* Remove extra top padding */
     padding-right: 0;
-    background: #e0ffe0;
-    /* debug color */
+    background: transparent;
 }
 
 /* Responsive Design */
