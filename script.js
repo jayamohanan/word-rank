@@ -1,3 +1,12 @@
+// Persistent score frequency tracking
+function updateScoreFrequency(score) {
+    let freq = JSON.parse(localStorage.getItem('scoreFrequency') || '{}');
+    for (let i = 0; i <= 10; i++) {
+        if (typeof freq[i] !== 'number') freq[i] = 0;
+    }
+    freq[score]++;
+    localStorage.setItem('scoreFrequency', JSON.stringify(freq));
+}
 // Game State
 let wordsData = [];
 let currentRound = 1;
@@ -206,6 +215,8 @@ function showSummaryModal() {
         if (levelResults[i] === true) correct++;
         else if (levelResults[i] === false) wrong++;
     }
+    // Update persistent score frequency
+    updateScoreFrequency(correct);
     summaryScore.textContent = `Score: ${correct} / 10`;
     summaryCorrect.textContent = `Correct: ${correct}`;
     summaryWrong.textContent = `Wrong: ${wrong}`;
