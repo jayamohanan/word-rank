@@ -12,8 +12,10 @@
     width: 80% !important;
     margin-left: 10% !important;
     margin-right: 10% !important;
-    min-width: 0 !important;
-    transition: width 0.2s;
+        width: 100% !important;
+        margin: 0 !important;
+        min-width: 0 !important;
+        transition: background 0.2s, box-shadow 0.2s;
 }
 
 .word-tile.correct {
@@ -21,7 +23,10 @@
     margin-left: 2% !important;
     margin-right: 2% !important;
     z-index: 2;
-    transition: width 0.2s;
+        width: 100% !important;
+        margin: 0 !important;
+        z-index: 2;
+        transition: background 0.2s, box-shadow 0.2s;
 }
 .level-circle.wrong {
     background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
@@ -280,7 +285,9 @@ header h1 {
     width: 80% !important;
     margin-left: 10% !important;
     margin-right: 10% !important;
-    transition: none;
+        width: 100% !important;
+        margin: 0 !important;
+        transition: background 0.2s, box-shadow 0.2s;
 }
 
 .word-text {
