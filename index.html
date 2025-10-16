@@ -3,12 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My First Game</title>
+    <title>Word Popularity Picker</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Hello Game World!</h1>
-    <canvas id="gameCanvas" width="400" height="600"></canvas>
+    <div class="container">
+        <header>
+            <h1>Word Popularity Picker</h1>
+            <p class="instructions">Which word is more popular?</p>
+        </header>
+
+        <main id="gameArea">
+            <div class="word-tiles" id="wordTiles">
+                <button class="word-tile" id="word1" disabled>
+                    <span class="word-text"></span>
+                </button>
+                <button class="word-tile" id="word2" disabled>
+                    <span class="word-text"></span>
+                </button>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div class="controls" id="controls">
+                <button class="next-btn" id="nextBtn" style="display: none;">Next</button>
+            </div>
+        </main>
+
+        <footer>
+            <p class="round-info">Round: <span id="roundNumber">1</span></p>
+        </footer>
+    </div>
 
     <script src="script.js"></script>
 </body>
