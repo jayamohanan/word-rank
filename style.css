@@ -11,6 +11,7 @@
     z-index: 10;
     outline: none;
     padding: 0;
+    pointer-events: auto;
 }
 .trophy-circle {
     display: inline-flex;
@@ -26,6 +27,7 @@
     box-shadow: 0 2px 8px rgba(255,215,0,0.08);
     border: 2px solid #FFD700;
     transition: background 0.2s, box-shadow 0.2s;
+    pointer-events: none;
 }
 .trophy-btn:focus .trophy-circle,
 .trophy-btn:hover .trophy-circle {

@@ -182,9 +182,7 @@ function getRandomWords() {
 
 // Helper function to convert to Title Case
 function toTitleCase(str) {
-    console.log('called toTitleCase ', str);
     if (!str) return '';
-    console.log('will return ', (str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()));
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
 
@@ -365,27 +363,6 @@ function showSummaryModal() {
         currentLevel++;
         setCurrentLevel(currentLevel);
     }
-// Achievements modal logic
-const trophyBtn = document.getElementById('trophyBtn');
-const achievementsModal = document.getElementById('achievementsModal');
-const closeAchievements = document.getElementById('closeAchievements');
-
-if (trophyBtn) {
-    trophyBtn.addEventListener('click', function() {
-        achievementsModal.style.display = 'flex';
-        renderAchievementsBoard();
-    });
-}
-if (closeAchievements) {
-    closeAchievements.addEventListener('click', function() {
-        achievementsModal.style.display = 'none';
-    });
-}
-window.addEventListener('click', function(e) {
-    if (e.target === achievementsModal) {
-        achievementsModal.style.display = 'none';
-    }
-});
     // Hide game area
     document.getElementById('gameArea').style.display = 'none';
     levelProgressBar.style.display = 'none';
@@ -475,6 +452,7 @@ window.addEventListener('click', function(e) {
 }
 
 if (summaryCloseBtn) {
+    console.log('jaya');
     summaryCloseBtn.onclick = function() {
         summaryModal.style.display = 'none';
         // Optionally reset for next set
@@ -484,6 +462,9 @@ if (summaryCloseBtn) {
         currentRound = (currentLevel - 1) * LEVELS_PER_SET + 1;
         startNewRound();
     };
+}
+else{
+    console.log('no jaya');
 }
 
 // Event Listeners
@@ -497,6 +478,34 @@ const infoBtn = document.getElementById('infoBtn');
 const infoModal = document.getElementById('infoModal');
 const closeModal = document.getElementById('closeModal');
 const wordTableBody = document.querySelector('#wordTable tbody');
+
+// Achievements modal logic
+const trophyBtn = document.getElementById('trophyBtn');
+const achievementsModal = document.getElementById('achievementsModal');
+const closeAchievements = document.getElementById('closeAchievements');
+
+console.log('Trophy button:', trophyBtn);
+console.log('Achievements modal:', achievementsModal);
+
+if (trophyBtn) {
+    console.log('Attaching click handler to trophy button');
+    trophyBtn.addEventListener('click', function(e) {
+        console.log('Achievements button clicked', e);
+        e.preventDefault();
+        e.stopPropagation();
+        if (achievementsModal) {
+            achievementsModal.style.display = 'flex';
+            renderAchievementsBoard();
+        }
+    });
+} else {
+    console.error('Trophy button not found!');
+}
+if (closeAchievements) {
+    closeAchievements.addEventListener('click', function() {
+        achievementsModal.style.display = 'none';
+    });
+}
 
 if (infoBtn) {
     infoBtn.addEventListener('click', function() {
@@ -521,6 +530,9 @@ if (closeModal) {
 window.addEventListener('click', function(e) {
     if (e.target === infoModal) {
         infoModal.style.display = 'none';
+    }
+    if (e.target === achievementsModal) {
+        achievementsModal.style.display = 'none';
     }
 });
 
