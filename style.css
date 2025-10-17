@@ -1,3 +1,9 @@
+.achievement-text .achievement-name {
+    font-weight: bold;
+    font-size: 1rem;
+    margin-bottom: 1px;
+    color: #333;
+}
 .achievement-text h3, .achievement-text strong {
     margin-bottom: 1px;
     border-radius: 4px;
@@ -19,7 +25,7 @@
 }
 .achievement-text .achievement-desc {
     margin-top: 0;
-    font-size: 0.9rem;
+    font-size: 0.675rem;
 }
 /* Center achievement name and description */
 .achievement-text {
