@@ -98,7 +98,9 @@ function renderAchievementsBoard() {
                 <span style="font-size:0.95rem;">${a.desc}</span>
             </span>
             <span class="achievement-progress">
-                ${unlocked[a.id] ? 'Unlocked' : achievementProgressText(a, freq)}
+                                                                                ${unlocked[a.id]
+                                                                                    ? '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#43e97b" viewBox="0 0 16 16"><path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2M3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1z"/></svg>'
+                                                                                    : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fa709a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>'}
             </span>
         `;
         list.appendChild(div);
