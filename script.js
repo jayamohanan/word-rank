@@ -93,9 +93,9 @@ function renderAchievementsBoard() {
         div.className = 'achievement' + (unlocked[a.id] ? ' unlocked' : '');
         div.innerHTML = `
             <span class="achievement-icon">${a.icon}</span>
-            <span>
+            <span class="achievement-text">
                 <strong>${a.name}</strong><br>
-                <span style="font-size:0.95rem;">${a.desc}</span>
+                <span style="font-size:0.8rem;">${a.desc}</span>
             </span>
             <span class="achievement-progress">
                                                                                 ${unlocked[a.id]
