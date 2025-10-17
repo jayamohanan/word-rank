@@ -484,13 +484,9 @@ const trophyBtn = document.getElementById('trophyBtn');
 const achievementsModal = document.getElementById('achievementsModal');
 const closeAchievements = document.getElementById('closeAchievements');
 
-console.log('Trophy button:', trophyBtn);
-console.log('Achievements modal:', achievementsModal);
 
 if (trophyBtn) {
-    console.log('Attaching click handler to trophy button');
     trophyBtn.addEventListener('click', function(e) {
-        console.log('Achievements button clicked', e);
         e.preventDefault();
         e.stopPropagation();
         if (achievementsModal) {
@@ -498,8 +494,6 @@ if (trophyBtn) {
             renderAchievementsBoard();
         }
     });
-} else {
-    console.error('Trophy button not found!');
 }
 if (closeAchievements) {
     closeAchievements.addEventListener('click', function() {
