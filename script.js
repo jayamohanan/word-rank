@@ -79,6 +79,66 @@ const highScoreValue = document.getElementById('highScoreValue');
 const currentScoreDisplay = document.getElementById('currentScoreDisplay');
 const currentScoreValue = document.getElementById('currentScoreValue');
 
+// --- Sound Effects (Mobile-Optimized) ---
+let audioContext;
+let correctSoundBuffer;
+let incorrectSoundBuffer;
+let audioInitialized = false;
+
+// Initialize AudioContext on first user interaction
+function initAudio() {
+    if (audioInitialized) return;
+    
+    try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // Load correct sound
+        fetch('sounds/correct_answer.mp3')
+            .then(response => response.arrayBuffer())
+            .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+            .then(buffer => {
+                correctSoundBuffer = buffer;
+            })
+            .catch(err => console.error('Error loading correct sound:', err));
+        
+        // Load incorrect sound
+        fetch('sounds/incorrect_answer.mp3')
+            .then(response => response.arrayBuffer())
+            .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+            .then(buffer => {
+                incorrectSoundBuffer = buffer;
+            })
+            .catch(err => console.error('Error loading incorrect sound:', err));
+        
+        audioInitialized = true;
+    } catch (err) {
+        console.error('Error initializing audio:', err);
+    }
+}
+
+// Play sound buffer
+function playSound(buffer) {
+    if (!audioContext || !buffer) return;
+    
+    try {
+        // Resume context if suspended (iOS requirement)
+        if (audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+        
+        const source = audioContext.createBufferSource();
+        source.buffer = buffer;
+        source.connect(audioContext.destination);
+        source.start(0);
+    } catch (err) {
+        console.error('Error playing sound:', err);
+    }
+}
+
+// Initialize audio on first click/touch
+document.addEventListener('click', initAudio, { once: true });
+document.addEventListener('touchstart', initAudio, { once: true });
+
 // DOM Elements - Modal
 const summaryModal = document.getElementById('summaryModal');
 const summaryTitle = document.getElementById('summaryTitle');
@@ -367,7 +427,12 @@ function handleWordClick(selectedIndex) {
     const correctIndex = currentWords.reduce((minIdx, word, idx, arr) => word.rank < arr[minIdx].rank ? idx : minIdx, 0);
     const isCorrect = selectedIndex === correctIndex;
 
-    // No sound effect
+    // Play sound feedback
+    if (isCorrect) {
+        playSound(correctSoundBuffer);
+    } else {
+        playSound(incorrectSoundBuffer);
+    }
 
     // Handle classic mode
     if (GAME_MODE === 'classic') {
