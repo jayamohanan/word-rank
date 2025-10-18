@@ -329,7 +329,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 2px;
 }
 
 
@@ -728,8 +728,7 @@ footer {
 /* Responsive Design */
 @media (max-width: 600px) {
     .container {
-        padding: 16px 15px;
-        padding-bottom: max(16px, env(safe-area-inset-bottom));
+        padding: 0 15px;
         min-height: 0;
         max-height: calc(var(--vh, 1vh) * 100);
         height: calc(var(--vh, 1vh) * 100);
@@ -738,6 +737,7 @@ footer {
         max-width: 100%;
         overflow-y: auto;
         overflow-x: hidden;
+        box-sizing: border-box;
     }
 
     header h1 {
@@ -803,20 +803,18 @@ footer {
     }
 }
 
-/* Modern viewport units support for better mobile browser handling */
-@supports (height: 100svh) {
-    @media (max-width: 600px) {
-        .container {
-            height: 100svh;
-            max-height: 100svh;
-        }
-    }
-}
-
 @media (max-width: 400px) {
     .container {
-        padding: 2px 2px;
-        padding-bottom: max(14px, env(safe-area-inset-bottom));
+        padding: 0 12px;
+        min-height: 0;
+        max-height: calc(var(--vh, 1vh) * 100);
+        height: calc(var(--vh, 1vh) * 100);
+        aspect-ratio: auto;
+        border-radius: 0;
+        max-width: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        box-sizing: border-box;
     }
     
     header h1 {
