@@ -1,3 +1,12 @@
+.shake {
+    animation: shake 0.16s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    30% { transform: translateX(-4px); }
+    60% { transform: translateX(4px); }
+    100% { transform: none; }
+}
 #currentScoreDisplay {
     display: flex;
     justify-content: center;

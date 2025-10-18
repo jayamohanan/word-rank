@@ -423,9 +423,18 @@ function handleWordClick(selectedIndex) {
     if (selectedIndex === 1) word2Btn.classList.add('correct');
     if (selectedIndex === 2) word3Btn.classList.add('correct');
     if (!isCorrect) {
-        if (selectedIndex === 0) word1Btn.classList.add('incorrect');
-        if (selectedIndex === 1) word2Btn.classList.add('incorrect');
-        if (selectedIndex === 2) word3Btn.classList.add('incorrect');
+        let wrongBtn;
+        if (selectedIndex === 0) wrongBtn = word1Btn;
+        if (selectedIndex === 1) wrongBtn = word2Btn;
+        if (selectedIndex === 2) wrongBtn = word3Btn;
+        if (wrongBtn) {
+            wrongBtn.classList.add('incorrect', 'shake');
+            // Remove shake class after animation
+            wrongBtn.addEventListener('animationend', function handler() {
+                wrongBtn.classList.remove('shake');
+                wrongBtn.removeEventListener('animationend', handler);
+            });
+        }
         // Highlight correct word
         if (correctIndex === 0) word1Btn.classList.add('correct');
         if (correctIndex === 1) word2Btn.classList.add('correct');
