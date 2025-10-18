@@ -729,8 +729,12 @@ footer {
 
 /* Responsive Design */
 @media (max-width: 600px) {
+    body {
+        padding: 0;
+    }
+
     .container {
-        padding: 30px 30px;
+        padding: 20px 20px 20px 20px;
         min-height: 100svh;
         height: 100svh;
         max-height: 100svh;
@@ -741,15 +745,22 @@ footer {
         overflow-y: auto;
         overflow-x: hidden;
         box-sizing: border-box;
-        /* Inherit desktop flexbox layout */
+        display: flex;
+        flex-direction: column;
+        /* Ensure smooth scrolling */
+        -webkit-overflow-scrolling: touch;
     }
 
     /* All child elements inherit desktop styles */
 }
 
 @media (max-width: 400px) {
+    body {
+        padding: 0;
+    }
+
     .container {
-        padding: 30px 30px;
+        padding: 20px 20px 20px 20px;
         min-height: 100svh;
         height: 100svh;
         max-height: 100svh;
@@ -760,7 +771,10 @@ footer {
         overflow-y: auto;
         overflow-x: hidden;
         box-sizing: border-box;
-        /* Inherit desktop flexbox layout */
+        display: flex;
+        flex-direction: column;
+        /* Ensure smooth scrolling */
+        -webkit-overflow-scrolling: touch;
     }
 
     /* All child elements inherit desktop styles */
