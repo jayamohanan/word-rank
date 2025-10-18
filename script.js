@@ -415,16 +415,9 @@ function handleWordClick(selectedIndex) {
     }
     rankHtml += '</div>';
 
-    // Update UI based on result
-    if (isCorrect) {
-        feedbackDiv.innerHTML = '\u2713 Correct!';
-        feedbackDiv.className = 'feedback correct';
-    } else {
-        feedbackDiv.innerHTML = '\u2717 Wrong!';
-        feedbackDiv.className = 'feedback incorrect';
-    }
-    // Show ranks at bottom in requested horizontal format
-    feedbackDiv.innerHTML += rankHtml;
+    // Only show the rank info, no correct/wrong label
+    feedbackDiv.innerHTML = rankHtml;
+    feedbackDiv.className = isCorrect ? 'feedback correct' : 'feedback incorrect';
 
     if (selectedIndex === 0) word1Btn.classList.add('correct');
     if (selectedIndex === 1) word2Btn.classList.add('correct');
