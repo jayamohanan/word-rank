@@ -628,7 +628,6 @@ function showSummaryModal() {
 
         // Restore default buttons for levels mode
         summaryButtons.innerHTML = '';
-        
         // Add Retry button if failed
         if (correct < 5) {
             const retryBtn = document.createElement('button');
@@ -640,7 +639,6 @@ function showSummaryModal() {
                 document.getElementById('gameArea').style.display = '';
                 levelProgressBar.style.display = '';
                 currentRound = (currentLevel - 1) * LEVELS_PER_SET + 1;
-                
                 // Check if data is loaded
                 if (!wordsData || wordsData.length === 0) {
                     console.error('Retry failed: wordsData not loaded. Reloading...');
@@ -655,29 +653,30 @@ function showSummaryModal() {
             };
             summaryButtons.appendChild(retryBtn);
         }
-        
-        const closeBtn = document.createElement('button');
-        closeBtn.textContent = correct < 5 ? 'Close' : 'Next';
-        closeBtn.style = 'margin-top:16px;padding:10px 30px;border-radius:8px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;font-weight:bold;border:none;cursor:pointer;font-size:1.1rem;';
-        closeBtn.onclick = function() {
-            console.log('Levels next/close clicked. wordsData length:', wordsData ? wordsData.length : 'undefined');
-            summaryModal.style.display = 'none';
-            document.getElementById('gameArea').style.display = '';
-            levelProgressBar.style.display = '';
-            
-            // Check if data is loaded
-            if (!wordsData || wordsData.length === 0) {
-                console.error('Next failed: wordsData not loaded. Reloading...');
-                loadWordData().then(() => {
-                    if (wordsData && wordsData.length > 0) {
-                        startNewRound();
-                    }
-                });
-            } else {
-                startNewRound();
-            }
-        };
-        summaryButtons.appendChild(closeBtn);
+        // Only add Next button if passed (correct >= 5)
+        if (correct >= 5) {
+            const nextBtn = document.createElement('button');
+            nextBtn.textContent = 'Next';
+            nextBtn.style = 'margin-top:16px;padding:10px 30px;border-radius:8px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;font-weight:bold;border:none;cursor:pointer;font-size:1.1rem;';
+            nextBtn.onclick = function() {
+                console.log('Levels next clicked. wordsData length:', wordsData ? wordsData.length : 'undefined');
+                summaryModal.style.display = 'none';
+                document.getElementById('gameArea').style.display = '';
+                levelProgressBar.style.display = '';
+                // Check if data is loaded
+                if (!wordsData || wordsData.length === 0) {
+                    console.error('Next failed: wordsData not loaded. Reloading...');
+                    loadWordData().then(() => {
+                        if (wordsData && wordsData.length > 0) {
+                            startNewRound();
+                        }
+                    });
+                } else {
+                    startNewRound();
+                }
+            };
+            summaryButtons.appendChild(nextBtn);
+        }
     }
     
     // Show modal
