@@ -738,7 +738,6 @@ footer {
         max-width: 100%;
         overflow-y: auto;
         overflow-x: hidden;
-        background: #dfc440;
     }
 
     header h1 {
@@ -816,9 +815,8 @@ footer {
 
 @media (max-width: 400px) {
     .container {
-        padding: 14px 12px;
+        padding: 2px 2px;
         padding-bottom: max(14px, env(safe-area-inset-bottom));
-        background: #57f88c;
     }
     
     header h1 {
