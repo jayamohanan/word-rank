@@ -744,67 +744,7 @@ footer {
         /* Inherit desktop flexbox layout */
     }
 
-    header h1 {
-        font-size: 1.4rem;
-        margin-bottom: 6px;
-    }
-    
-    .instructions {
-        font-size: 0.9rem;
-        margin-bottom: 10px;
-        margin-top: 6px;
-    }
-
-    .word-tiles {
-        gap: 12px;
-        margin-bottom: 15px;
-    }
-
-    .word-text {
-        font-size: 1.2rem;
-        text-transform: none;
-    }
-
-    .word-tile {
-        padding: 14px 12px;
-        min-height: 48px;
-        max-height: 54px;
-        font-size: 1.2rem;
-    }
-
-    .feedback {
-        font-size: 0.95rem;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        padding: 8px;
-    }
-    
-    .rank-list-horizontal {
-        font-size: 0.8rem;
-        margin-top: 6px;
-        line-height: 1.4;
-    }
-
-    .next-btn {
-        padding: 10px 24px;
-        font-size: 0.95rem;
-        margin-top: 10px;
-    }
-    
-    .level-progress-bar {
-        gap: 6px;
-        margin-bottom: 10px;
-    }
-    
-    .level-circle {
-        width: 28px;
-        height: 28px;
-    }
-    
-    #levelNumber {
-        font-size: 1rem;
-        margin: 6px 0;
-    }
+    /* All child elements inherit desktop styles */
 }
 
 @media (max-width: 400px) {
@@ -822,34 +762,6 @@ footer {
         box-sizing: border-box;
         /* Inherit desktop flexbox layout */
     }
-    
-    header h1 {
-        font-size: 1.3rem;
-    }
 
-    .word-text {
-        font-size: 1.1rem;
-        text-transform: none;
-    }
-
-    .word-tile {
-        padding: 12px 10px;
-        min-height: 44px;
-        max-height: 50px;
-        font-size: 1.1rem;
-    }
-    
-    .feedback {
-        font-size: 0.9rem;
-        padding: 6px;
-    }
-    
-    .rank-list-horizontal {
-        font-size: 0.75rem;
-    }
-    
-    .next-btn {
-        padding: 9px 20px;
-        font-size: 0.9rem;
-    }
+    /* All child elements inherit desktop styles */
 }
