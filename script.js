@@ -4,12 +4,28 @@
 // ============================================
 const ACHIEVEMENTS_ENABLED = false;
 
+// ============================================
+// GAME MODE CONFIGURATION
+// ============================================
+let GAME_MODE = 'levels'; // 'levels' or 'classic'
+let classicLives = 3;
+let classicScore = 0;
+let classicHighScore = 0;
+
 // Persistent level tracker
 function getCurrentLevel() {
     return parseInt(localStorage.getItem('currentLevel') || '1', 10);
 }
 function setCurrentLevel(level) {
     localStorage.setItem('currentLevel', level);
+}
+
+// Classic mode high score
+function getClassicHighScore() {
+    return parseInt(localStorage.getItem('classicHighScore') || '0', 10);
+}
+function setClassicHighScore(score) {
+    localStorage.setItem('classicHighScore', score);
 }
 
 // Level Progress Bar State
@@ -21,8 +37,14 @@ let currentWords = [];
 let isAnswered = false;
 let levelResults = []; // true for correct, false for incorrect
 
+// DOM Elements - Pages
+const homePage = document.getElementById('homePage');
+const gamePage = document.getElementById('gamePage');
+const levelsBtn = document.getElementById('levelsBtn');
+const classicBtn = document.getElementById('classicBtn');
+const homeBtn = document.getElementById('homeBtn');
 
-// DOM Elements
+// DOM Elements - Game
 const word1Btn = document.getElementById('word1');
 const word2Btn = document.getElementById('word2');
 const word3Btn = document.getElementById('word3');
@@ -30,11 +52,116 @@ const feedbackDiv = document.getElementById('feedback');
 const nextBtn = document.getElementById('nextBtn');
 const roundNumber = document.getElementById('roundNumber');
 const levelProgressBar = document.getElementById('levelProgressBar');
+const levelNumberDiv = document.getElementById('levelNumber');
+
+// DOM Elements - Classic Mode
+const livesContainer = document.getElementById('livesContainer');
+const livesDisplay = document.getElementById('livesDisplay');
+const highScoreDisplay = document.getElementById('highScoreDisplay');
+const highScoreValue = document.getElementById('highScoreValue');
+
+// DOM Elements - Modal
 const summaryModal = document.getElementById('summaryModal');
+const summaryTitle = document.getElementById('summaryTitle');
 const summaryScore = document.getElementById('summaryScore');
 const summaryCorrect = document.getElementById('summaryCorrect');
 const summaryWrong = document.getElementById('summaryWrong');
 const summaryCloseBtn = document.getElementById('summaryCloseBtn');
+const summaryButtons = document.getElementById('summaryButtons');
+
+// Heart SVG icons
+function getHeartSVG(broken = false) {
+    if (broken) {
+        return `<svg class="heart-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" 
+            stroke="#ccc" stroke-width="2" fill="none" stroke-dasharray="4,4"/>
+            <line x1="6" y1="6" x2="18" y2="18" stroke="#ff4444" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>`;
+    } else {
+        return `<svg class="heart-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" 
+            fill="#ff4444" stroke="#cc0000" stroke-width="2"/>
+        </svg>`;
+    }
+}
+
+// Update lives display
+function updateLivesDisplay() {
+    if (GAME_MODE !== 'classic') return;
+    
+    livesDisplay.innerHTML = '';
+    for (let i = 0; i < 3; i++) {
+        const heartDiv = document.createElement('div');
+        heartDiv.innerHTML = getHeartSVG(i >= classicLives);
+        livesDisplay.appendChild(heartDiv);
+    }
+}
+
+// Initialize game mode
+async function startLevelsMode() {
+    // Always reload word data before starting
+    try {
+        const response = await fetch('word-rank.json');
+        wordsData = await response.json();
+        console.log(`Reloaded ${wordsData.length} words for Levels mode`);
+    } catch (error) {
+        console.error('Error loading word data:', error);
+        feedbackDiv.textContent = 'Error: Game data not loaded. Please return to home and try again.';
+        feedbackDiv.style.color = '#ff4444';
+        return;
+    }
+    GAME_MODE = 'levels';
+    homePage.style.display = 'none';
+    gamePage.style.display = 'block';
+    // Show levels UI elements
+    levelProgressBar.style.display = 'flex';
+    levelNumberDiv.style.display = 'block';
+    // Hide classic mode UI elements
+    livesContainer.style.display = 'none';
+    highScoreDisplay.style.display = 'none';
+    // Reset level progress
+    currentLevel = getCurrentLevel();
+    currentRound = 1;
+    levelResults = [];
+    renderLevelProgressBar();
+    startNewRound();
+}
+
+async function startClassicMode() {
+    // Always reload word data before starting
+    try {
+        const response = await fetch('word-rank.json');
+        wordsData = await response.json();
+        console.log(`Reloaded ${wordsData.length} words for Classic mode`);
+    } catch (error) {
+        console.error('Error loading word data:', error);
+        feedbackDiv.textContent = 'Error: Game data not loaded. Please return to home and try again.';
+        feedbackDiv.style.color = '#ff4444';
+        return;
+    }
+    GAME_MODE = 'classic';
+    homePage.style.display = 'none';
+    gamePage.style.display = 'block';
+    // Hide levels UI elements
+    levelProgressBar.style.display = 'none';
+    levelNumberDiv.style.display = 'none';
+    // Show classic mode UI elements
+    livesContainer.style.display = 'block';
+    highScoreDisplay.style.display = 'block';
+    // Reset classic mode state
+    classicLives = 3;
+    classicScore = 0;
+    classicHighScore = getClassicHighScore();
+    highScoreValue.textContent = classicHighScore;
+    updateLivesDisplay();
+    startNewRound();
+}
+
+function goHome() {
+    gamePage.style.display = 'none';
+    homePage.style.display = 'flex';
+    summaryModal.style.display = 'none';
+}
 
 // Initialize Game
 async function initGame() {
@@ -50,8 +177,48 @@ async function initGame() {
     }
 }
 
+// Load word data on startup (but don't start game yet)
+async function loadWordData() {
+    try {
+        const response = await fetch('word-rank.json');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        wordsData = await response.json();
+        console.log(`Loaded ${wordsData.length} words`);
+        
+        // Ensure we're on the home page after loading
+        initializeApp();
+    } catch (error) {
+        console.error('Error loading word data:', error);
+        
+        // Show error in the UI
+        if (homePage) {
+            const errorDiv = document.createElement('div');
+            errorDiv.style.cssText = 'color: #ff4444; padding: 20px; text-align: center; font-weight: bold;';
+            errorDiv.textContent = 'Error loading game data. Please refresh the page.';
+            homePage.appendChild(errorDiv);
+        }
+    }
+}
+
+// Initialize app state
+function initializeApp() {
+    // Always show home page on load/reload
+    if (homePage && gamePage) {
+        homePage.style.display = 'flex';
+        gamePage.style.display = 'none';
+        if (summaryModal) {
+            summaryModal.style.display = 'none';
+        }
+    }
+}
+
 // Get three random words
 function getRandomWords() {
+    console.log('get random called');
     const shuffled = [...wordsData].sort(() => Math.random() - 0.5);
     return [shuffled[0], shuffled[1], shuffled[2]];
 }
@@ -64,7 +231,7 @@ function toTitleCase(str) {
 
 // Render the level progress bar for the current set
 function renderLevelProgressBar() {
-    if (!levelProgressBar) return;
+    if (!levelProgressBar || GAME_MODE !== 'levels') return;
     const setStart = Math.floor((currentRound - 1) / LEVELS_PER_SET) * LEVELS_PER_SET + 1;
     const setEnd = setStart + LEVELS_PER_SET - 1;
     levelProgressBar.innerHTML = '';
@@ -102,22 +269,37 @@ function renderLevelProgressBar() {
 
 // Start a new round
 function startNewRound() {
-    // Update level number in UI
-    const levelNumberDiv = document.getElementById('levelNumber');
-    if (levelNumberDiv) levelNumberDiv.textContent = `Level ${currentLevel}`;
+    console.log('start new round');
+    // Validate that word data is loaded
+    if (!wordsData || wordsData.length === 0) {
+        console.error('Cannot start round: Word data not loaded!');
+        feedbackDiv.textContent = 'Error: Game data not available.';
+        feedbackDiv.style.color = '#ff4444';
+        return;
+    }
+    
+    // Update level number in UI (only for levels mode)
+    if (GAME_MODE === 'levels') {
+        const levelNumberDiv = document.getElementById('levelNumber');
+        if (levelNumberDiv) levelNumberDiv.textContent = `Level ${currentLevel}`;
+        
+        // Reset game answers if starting first round of level
+        if ((currentRound - 1) % LEVELS_PER_SET === 0) {
+            currentGameAnswers = [];
+        }
+    }
+    
     // Reset state
     isAnswered = false;
     currentWords = getRandomWords();
-    
-    // Reset game answers if starting first round of level
-    if ((currentRound - 1) % LEVELS_PER_SET === 0) {
-        currentGameAnswers = [];
-    }
 
     // Update UI
     word1Btn.querySelector('.word-text').textContent = toTitleCase(currentWords[0].lemma);
     word2Btn.querySelector('.word-text').textContent = toTitleCase(currentWords[1].lemma);
     word3Btn.querySelector('.word-text').textContent = toTitleCase(currentWords[2].lemma);
+console.log(word1Btn.querySelector('.word-text').textContent);
+console.log(word2Btn.querySelector('.word-text').textContent);
+console.log(word3Btn.querySelector('.word-text').textContent);
 
     // Reset styles
     word1Btn.className = 'word-tile';
@@ -139,9 +321,13 @@ function startNewRound() {
     // Hide next button
     nextBtn.style.display = 'none';
 
-
-    // Update level progress bar
-    renderLevelProgressBar();
+    // Update level progress bar (only for levels mode)
+    if (GAME_MODE === 'levels') {
+        renderLevelProgressBar();
+    }
+    console.log('word1Btn.className:', word1Btn.className);
+    console.log('word2Btn.className:', word2Btn.className);
+    console.log('word3Btn.className:', word3Btn.className);
 }
 
 // Handle word selection
@@ -155,14 +341,22 @@ function handleWordClick(selectedIndex) {
     const correctIndex = currentWords.reduce((minIdx, word, idx, arr) => word.rank < arr[minIdx].rank ? idx : minIdx, 0);
     const isCorrect = selectedIndex === correctIndex;
 
-    // Track result for progress bar
-    levelResults[currentRound - 1] = isCorrect;
+    // Handle classic mode
+    if (GAME_MODE === 'classic') {
+        if (isCorrect) {
+            classicScore++;
+        } else {
+            classicLives--;
+            updateLivesDisplay();
+        }
+    } else {
+        // Handle levels mode
+        levelResults[currentRound - 1] = isCorrect;
+        currentGameAnswers.push(isCorrect);
+    }
     
-    // Track answer in current game
-    currentGameAnswers.push(isCorrect);
-    
-    // Update total correct count
-    if (isCorrect) {
+    // Update total correct count (only for achievements)
+    if (isCorrect && ACHIEVEMENTS_ENABLED) {
         const totalCorrect = parseInt(localStorage.getItem('totalCorrect') || '0') + 1;
         localStorage.setItem('totalCorrect', totalCorrect);
     }
@@ -214,93 +408,177 @@ function handleWordClick(selectedIndex) {
     // Show next button
     nextBtn.style.display = 'inline-block';
 
-    // Update progress bar
-    renderLevelProgressBar();
+    // Update progress bar (only for levels mode)
+    if (GAME_MODE === 'levels') {
+        renderLevelProgressBar();
+    }
 }
 
 // Handle next button click
 function handleNextClick() {
-    currentRound++;
-    // If finished 10 rounds, show summary
-    if ((currentRound-1) % LEVELS_PER_SET === 0) {
+    // Check for game over in classic mode
+    if (GAME_MODE === 'classic' && classicLives <= 0) {
         showSummaryModal();
-    } else {
+        return;
+    }
+    
+    // Continue to next round
+    if (GAME_MODE === 'classic') {
         startNewRound();
+    } else {
+        // Levels mode
+        currentRound++;
+        // If finished 10 rounds, show summary
+        if ((currentRound-1) % LEVELS_PER_SET === 0) {
+            showSummaryModal();
+        } else {
+            startNewRound();
+        }
     }
 }
 
 function showSummaryModal() {
-    // Calculate score
-    const setStart = Math.floor((currentRound - 2) / LEVELS_PER_SET) * LEVELS_PER_SET;
-    const setEnd = setStart + LEVELS_PER_SET;
-    let correct = 0, wrong = 0;
-    for (let i = setStart; i < setEnd; i++) {
-        if (levelResults[i] === true) correct++;
-        else if (levelResults[i] === false) wrong++;
-    }
-    
-    // Track special patterns for this game (only if achievements enabled)
-    if (ACHIEVEMENTS_ENABLED) {
-        trackGamePatterns(setStart, setEnd);
-    }
-    
-    // Update persistent score frequency (only if achievements enabled)
-    if (ACHIEVEMENTS_ENABLED) {
-        updateScoreFrequency(correct);
-    }
-    
-    // Reset current game answers for next game
-    currentGameAnswers = [];
-    
-    // Unlock achievements and show unlocked achievement if any (only if enabled)
-    let newlyUnlocked = [];
-    if (ACHIEVEMENTS_ENABLED) {
-        newlyUnlocked = unlockAchievements();
-    }
-    
-    // Only increment level if score >= 5
-    if (correct >= 5) {
-        currentLevel++;
-        setCurrentLevel(currentLevel);
-    }
-    // Hide game area
-    document.getElementById('gameArea').style.display = 'none';
-    levelProgressBar.style.display = 'none';
-    const modalContent = summaryModal.querySelector('.modal-content');
-    // Clear previous modal content except static elements
-    const title = modalContent.querySelector('h2');
-    if (title) title.textContent = correct < 5 ? 'Level Failed' : 'Level Complete!';
-    summaryScore.textContent = `Score: ${correct} / 10`;
-    summaryCorrect.textContent = '';
-    summaryWrong.textContent = '';
-    // Remove any previous custom elements (failMsg, retryBtn, achievementDiv, circles)
-    Array.from(modalContent.querySelectorAll('.summary-extra')).forEach(e => e.remove());
-    
-    // Show achievement unlocked AFTER clearing previous elements
-    if (newlyUnlocked.length > 0) {
-        const achievement = newlyUnlocked[0]; // We return only highest priority, so take first
-        const achievementDiv = document.createElement('div');
-        achievementDiv.className = 'summary-extra'; // Add class so it gets cleaned up next time
-        achievementDiv.style = 'margin:18px 0 0 0;padding:12px 0;border-radius:10px;background:#fffbe6;color:#333;font-weight:bold;display:flex;align-items:center;gap:12px;justify-content:center;';
-        achievementDiv.innerHTML = `<span style='font-size:1.6rem;'>${achievement.icon}</span> <span>Achievement Unlocked: ${achievement.name}</span>`;
-        modalContent.appendChild(achievementDiv);
-    }
+    if (GAME_MODE === 'classic') {
+        // Classic mode summary
+        const isNewHighScore = classicScore > classicHighScore;
+        if (isNewHighScore) {
+            classicHighScore = classicScore;
+            setClassicHighScore(classicScore);
+        }
+        
+        // Hide game area
+        document.getElementById('gameArea').style.display = 'none';
+        
+        const modalContent = summaryModal.querySelector('.modal-content');
+        summaryTitle.textContent = 'Game Over!';
+        summaryScore.textContent = `Your Score: ${classicScore}`;
+        summaryCorrect.textContent = '';
+        summaryWrong.textContent = '';
+        
+        // Clear previous custom elements
+        Array.from(modalContent.querySelectorAll('.summary-extra')).forEach(e => e.remove());
+        
+        // Show high score message
+        if (isNewHighScore && classicScore > 0) {
+            const highScoreMsg = document.createElement('div');
+            highScoreMsg.className = 'summary-extra';
+            highScoreMsg.style = 'margin:18px 0 0 0;padding:12px;border-radius:10px;background:#fffbe6;color:#667eea;font-weight:bold;font-size:1.2rem;text-align:center;';
+            highScoreMsg.innerHTML = '🏆 New High Score! 🏆';
+            modalContent.appendChild(highScoreMsg);
+        } else if (classicHighScore > 0) {
+            const highScoreMsg = document.createElement('div');
+            highScoreMsg.className = 'summary-extra';
+            highScoreMsg.style = 'margin:12px 0 0 0;font-size:0.95rem;color:#888;text-align:center;';
+            highScoreMsg.textContent = `High Score: ${classicHighScore}`;
+            modalContent.appendChild(highScoreMsg);
+        }
+        
+        // Replace buttons
+        summaryButtons.innerHTML = '';
+        
+        const retryBtn = document.createElement('button');
+        retryBtn.textContent = 'Retry';
+        retryBtn.style = 'margin:18px 8px 0 0;padding:10px 30px;border-radius:8px;background:linear-gradient(135deg,#43e97b 0%,#38f9d7 100%);color:#fff;font-weight:bold;border:none;cursor:pointer;';
+        retryBtn.onclick = () => {
+            console.log('Retry clicked. wordsData length:', wordsData ? wordsData.length : 'undefined');
+            summaryModal.style.display = 'none';
+            
+            // Check if data is loaded
+            if (!wordsData || wordsData.length === 0) {
+                console.error('Retry failed: wordsData not loaded. Reloading...');
+                loadWordData().then(() => {
+                    if (wordsData && wordsData.length > 0) {
+                        startClassicMode();
+                    }
+                });
+            } else {
+                startClassicMode();
+            }
+        };
+        
+        const homeButton = document.createElement('button');
+        homeButton.textContent = 'Home';
+        homeButton.style = 'margin:18px 0 0 8px;padding:10px 30px;border-radius:8px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;font-weight:bold;border:none;cursor:pointer;';
+        homeButton.onclick = () => {
+            goHome();
+        };
+        
+        summaryButtons.appendChild(retryBtn);
+        summaryButtons.appendChild(homeButton);
+        
+    } else {
+        // Levels mode summary
+        const setStart = Math.floor((currentRound - 2) / LEVELS_PER_SET) * LEVELS_PER_SET;
+        const setEnd = setStart + LEVELS_PER_SET;
+        let correct = 0, wrong = 0;
+        for (let i = setStart; i < setEnd; i++) {
+            if (levelResults[i] === true) correct++;
+            else if (levelResults[i] === false) wrong++;
+        }
+        
+        // Track special patterns for this game (only if achievements enabled)
+        if (ACHIEVEMENTS_ENABLED) {
+            trackGamePatterns(setStart, setEnd);
+        }
+        
+        // Update persistent score frequency (only if achievements enabled)
+        if (ACHIEVEMENTS_ENABLED) {
+            updateScoreFrequency(correct);
+        }
+        
+        // Reset current game answers for next game
+        currentGameAnswers = [];
+        
+        // Unlock achievements and show unlocked achievement if any (only if enabled)
+        let newlyUnlocked = [];
+        if (ACHIEVEMENTS_ENABLED) {
+            newlyUnlocked = unlockAchievements();
+        }
+        
+        // Only increment level if score >= 5
+        if (correct >= 5) {
+            currentLevel++;
+            setCurrentLevel(currentLevel);
+        }
+        
+        // Hide game area
+        document.getElementById('gameArea').style.display = 'none';
+        levelProgressBar.style.display = 'none';
+        
+        const modalContent = summaryModal.querySelector('.modal-content');
+        summaryTitle.textContent = correct < 5 ? 'Level Failed' : 'Level Complete!';
+        summaryScore.textContent = `Score: ${correct} / 10`;
+        summaryCorrect.textContent = '';
+        summaryWrong.textContent = '';
+        
+        // Clear previous custom elements
+        Array.from(modalContent.querySelectorAll('.summary-extra')).forEach(e => e.remove());
+        
+        // Show achievement unlocked AFTER clearing previous elements
+        if (newlyUnlocked.length > 0) {
+            const achievement = newlyUnlocked[0];
+            const achievementDiv = document.createElement('div');
+            achievementDiv.className = 'summary-extra';
+            achievementDiv.style = 'margin:18px 0 0 0;padding:12px 0;border-radius:10px;background:#fffbe6;color:#333;font-weight:bold;display:flex;align-items:center;gap:12px;justify-content:center;';
+            achievementDiv.innerHTML = `<span style='font-size:1.6rem;'>${achievement.icon}</span> <span>Achievement Unlocked: ${achievement.name}</span>`;
+            modalContent.appendChild(achievementDiv);
+        }
 
-    // Add score too low message if failed
-    if (correct < 5) {
-        const failMsg = document.createElement('div');
-        failMsg.className = 'summary-extra';
-        failMsg.style = 'margin:10px 0 0 0;font-size:1.1rem;color:#b71c1c;font-weight:bold;text-align:center;';
-        failMsg.textContent = 'Score too low. Try again!';
-        modalContent.appendChild(failMsg);
-    }
+        // Add score too low message if failed
+        if (correct < 5) {
+            const failMsg = document.createElement('div');
+            failMsg.className = 'summary-extra';
+            failMsg.style = 'margin:10px 0 0 0;font-size:1.1rem;color:#b71c1c;font-weight:bold;text-align:center;';
+            failMsg.textContent = 'Score too low. Try again!';
+            modalContent.appendChild(failMsg);
+        }
 
-    // Add circles for each question (correct/wrong) BELOW the score label
-    const circlesDiv = document.createElement('div');
-    circlesDiv.className = 'summary-extra';
-    circlesDiv.style = 'display:flex;justify-content:center;gap:6px;margin:12px 0 0 0;';
-    for (let i = setStart; i < setEnd; i++) {
-        const circle = document.createElement('div');
+        // Add circles for each question (correct/wrong)
+        const circlesDiv = document.createElement('div');
+        circlesDiv.className = 'summary-extra';
+        circlesDiv.style = 'display:flex;justify-content:center;gap:6px;margin:12px 0 0 0;';
+        for (let i = setStart; i < setEnd; i++) {
+            const circle = document.createElement('div');
         circle.style = 'width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.08);border:2px solid #bbb;';
         if (levelResults[i] === true) {
             circle.style.background = '#43e97b';
@@ -315,69 +593,78 @@ function showSummaryModal() {
             circle.innerHTML = '';
         }
         circlesDiv.appendChild(circle);
-    }
-    // Insert circlesDiv after summaryScore
-    if (summaryScore && summaryScore.parentNode) {
-        summaryScore.parentNode.insertBefore(circlesDiv, summaryScore.nextSibling);
-    } else {
-        modalContent.appendChild(circlesDiv);
-    }
+        }
+        // Insert circlesDiv after summaryScore
+        if (summaryScore && summaryScore.parentNode) {
+            summaryScore.parentNode.insertBefore(circlesDiv, summaryScore.nextSibling);
+        } else {
+            modalContent.appendChild(circlesDiv);
+        }
 
-    // Add Retry button if failed
-    if (correct < 5) {
-        const retryBtn = document.createElement('button');
-        retryBtn.className = 'summary-extra';
-        retryBtn.textContent = 'Retry';
-        retryBtn.style = 'margin-top:16px;padding:10px 30px;border-radius:8px;background:#b71c1c;color:#fff;font-weight:bold;border:none;cursor:pointer;font-size:1.1rem;';
-        retryBtn.onclick = function() {
+        // Restore default buttons for levels mode
+        summaryButtons.innerHTML = '';
+        
+        // Add Retry button if failed
+        if (correct < 5) {
+            const retryBtn = document.createElement('button');
+            retryBtn.textContent = 'Retry';
+            retryBtn.style = 'margin-top:16px;padding:10px 30px;border-radius:8px;background:#b71c1c;color:#fff;font-weight:bold;border:none;cursor:pointer;font-size:1.1rem;';
+            retryBtn.onclick = function() {
+                console.log('Levels retry clicked. wordsData length:', wordsData ? wordsData.length : 'undefined');
+                summaryModal.style.display = 'none';
+                document.getElementById('gameArea').style.display = '';
+                levelProgressBar.style.display = '';
+                currentRound = (currentLevel - 1) * LEVELS_PER_SET + 1;
+                
+                // Check if data is loaded
+                if (!wordsData || wordsData.length === 0) {
+                    console.error('Retry failed: wordsData not loaded. Reloading...');
+                    loadWordData().then(() => {
+                        if (wordsData && wordsData.length > 0) {
+                            startNewRound();
+                        }
+                    });
+                } else {
+                    startNewRound();
+                }
+            };
+            summaryButtons.appendChild(retryBtn);
+        }
+        
+        const closeBtn = document.createElement('button');
+        closeBtn.textContent = correct < 5 ? 'Close' : 'Next';
+        closeBtn.style = 'margin-top:16px;padding:10px 30px;border-radius:8px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;font-weight:bold;border:none;cursor:pointer;font-size:1.1rem;';
+        closeBtn.onclick = function() {
+            console.log('Levels next/close clicked. wordsData length:', wordsData ? wordsData.length : 'undefined');
             summaryModal.style.display = 'none';
             document.getElementById('gameArea').style.display = '';
             levelProgressBar.style.display = '';
-            currentRound = (currentLevel - 1) * LEVELS_PER_SET + 1;
-            startNewRound();
+            
+            // Check if data is loaded
+            if (!wordsData || wordsData.length === 0) {
+                console.error('Next failed: wordsData not loaded. Reloading...');
+                loadWordData().then(() => {
+                    if (wordsData && wordsData.length > 0) {
+                        startNewRound();
+                    }
+                });
+            } else {
+                startNewRound();
+            }
         };
-        modalContent.appendChild(retryBtn);
-    } else {
-        // Add Next button if level completed
-        const nextBtn = document.createElement('button');
-        nextBtn.className = 'summary-extra';
-        nextBtn.textContent = 'Next';
-        nextBtn.style = 'margin-top:16px;padding:10px 30px;border-radius:8px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;font-weight:bold;border:none;cursor:pointer;font-size:1.1rem;';
-        nextBtn.onclick = function() {
-            summaryModal.style.display = 'none';
-            document.getElementById('gameArea').style.display = '';
-            levelProgressBar.style.display = '';
-            // Start next level from beginning
-            currentRound = (currentLevel - 1) * LEVELS_PER_SET + 1;
-            startNewRound();
-        };
-        modalContent.appendChild(nextBtn);
+        summaryButtons.appendChild(closeBtn);
     }
-
-    // Remove the close button if present
-    const closeBtn = modalContent.querySelector('#summaryCloseBtn');
-    if (closeBtn) closeBtn.style.display = 'none';
-
+    
+    // Show modal
     summaryModal.style.display = 'flex';
 }
 
-if (summaryCloseBtn) {
-    console.log('jaya');
-    summaryCloseBtn.onclick = function() {
-        summaryModal.style.display = 'none';
-        // Optionally reset for next set
-        document.getElementById('gameArea').style.display = '';
-        levelProgressBar.style.display = '';
-        // Start next level from beginning
-        currentRound = (currentLevel - 1) * LEVELS_PER_SET + 1;
-        startNewRound();
-    };
-}
-else{
-    console.log('no jaya');
-}
+// Event Listeners - Mode Selection
+levelsBtn.addEventListener('click', startLevelsMode);
+classicBtn.addEventListener('click', startClassicMode);
+homeBtn.addEventListener('click', goHome);
 
-// Event Listeners
+// Event Listeners - Game
 word1Btn.addEventListener('click', () => handleWordClick(0));
 word2Btn.addEventListener('click', () => handleWordClick(1));
 word3Btn.addEventListener('click', () => handleWordClick(2));
@@ -385,6 +672,7 @@ nextBtn.addEventListener('click', handleNextClick);
 
 // Info Modal Logic
 const infoBtn = document.getElementById('infoBtn');
+const infoBtn2 = document.getElementById('infoBtn2');
 const infoModal = document.getElementById('infoModal');
 const closeModal = document.getElementById('closeModal');
 const wordTableBody = document.querySelector('#wordTable tbody');
@@ -435,6 +723,20 @@ if (infoBtn) {
     });
 }
 
+if (infoBtn2) {
+    infoBtn2.addEventListener('click', function() {
+        infoModal.style.display = 'flex';
+        if (wordTableBody && wordsData.length > 0 && wordTableBody.childElementCount === 0) {
+            // Fill table with first 200 words
+            let rows = '';
+            for (let i = 0; i < Math.min(200, wordsData.length); i++) {
+                rows += `<tr><td>${wordsData[i].rank}</td><td>${toTitleCase(wordsData[i].lemma)}</td></tr>`;
+            }
+            wordTableBody.innerHTML = rows;
+        }
+    });
+}
+
 if (closeModal) {
     closeModal.addEventListener('click', function() {
         infoModal.style.display = 'none';
@@ -450,6 +752,5 @@ window.addEventListener('click', function(e) {
     }
 });
 
-// Start the game
-// Start the game
-initGame();
+// Load word data on startup
+loadWordData();

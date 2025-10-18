@@ -3,25 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word Popularity Picker</title>
+    <title>Most Used Word</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <div class="top-bar">
-                        <button class="trophy-btn" aria-label="Achievements" id="trophyBtn">
-                                                                <span class="trophy-circle">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 1L15.09 7.26L22 8.27L17 13.14L18.18 20.02L12 16.77L5.82 20.02L7 13.14L2 8.27L8.91 7.26L12 1Z" fill="#FFD700" stroke="#CCAA00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="12" cy="18" r="3" fill="#A9A9A9" stroke="#808080" stroke-width="1.5"/>
-                <rect x="10" y="21" width="4" height="2" rx="1" fill="#A9A9A9" stroke="#808080" stroke-width="1.5"/>
-            </svg>
-                                                                </span>
-                        </button>
-                        <button class="info-btn" aria-label="Info" id="infoBtn">
-                                <span class="info-circle">?</span>
-                        </button>
+        <!-- Home Page -->
+        <div id="homePage" class="home-page">
+            <div class="top-bar">
+                <button class="info-btn" aria-label="Info" id="infoBtn">
+                    <span class="info-circle">?</span>
+                </button>
+            </div>
+            
+            <header class="home-header">
+                <h1>Most Used Word</h1>
+                <p class="home-subtitle">Choose your game mode</p>
+            </header>
+            
+            <div class="home-menu">
+                <button class="mode-btn" id="levelsBtn">
+                    <span class="mode-icon">📚</span>
+                    <span class="mode-title">Levels</span>
+                </button>
+                
+                <button class="mode-btn" id="classicBtn">
+                    <span class="mode-icon">🎯</span>
+                    <span class="mode-title">Classic</span>
+                </button>
+            </div>
         </div>
+
+        <!-- Game Page -->
+        <div id="gamePage" style="display: none;">
+            <div class="top-bar">
+                <button class="home-btn" aria-label="Home" id="homeBtn">
+                    <span class="home-icon">🏠</span>
+                </button>
+                <button class="info-btn" aria-label="Info" id="infoBtn2">
+                    <span class="info-circle">?</span>
+                </button>
+            </div>
+            
+            <!-- Lives indicator (for Classic mode only) -->
+            <div id="livesContainer" style="display: none; text-align: center; margin: 10px 0;">
+                <div id="livesDisplay"></div>
+            </div>
+            
+            <!-- High score display (for Classic mode only) -->
+            <div id="highScoreDisplay" style="display: none; text-align: center; margin: 8px 0; font-size: 0.95rem; color: #667eea; font-weight: bold;">
+                High Score: <span id="highScoreValue">0</span>
+            </div>
         
         <!-- Achievements Popup Modal -->
         <div id="achievementsModal" class="modal" style="display:none;">
@@ -96,12 +128,15 @@
         <!-- Game Summary Modal -->
         <div id="summaryModal" class="modal" style="display:none;">
             <div class="modal-content">
-                <h2>Level Complete!</h2>
+                <h2 id="summaryTitle">Level Complete!</h2>
                 <p id="summaryScore" style="font-size:1.3rem;font-weight:bold;margin:12px 0;"></p>
                 <p id="summaryCorrect" style="color:#43e97b;font-size:1.1rem;"></p>
                 <p id="summaryWrong" style="color:#fa709a;font-size:1.1rem;"></p>
-                <button id="summaryCloseBtn" style="margin-top:18px;padding:10px 30px;border-radius:8px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;font-weight:bold;border:none;cursor:pointer;">Close</button>
+                <div id="summaryButtons">
+                    <button id="summaryCloseBtn" style="margin-top:18px;padding:10px 30px;border-radius:8px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;font-weight:bold;border:none;cursor:pointer;">Close</button>
+                </div>
             </div>
+        </div>
         </div>
     </div>
 
