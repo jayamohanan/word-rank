@@ -730,7 +730,7 @@ footer {
 /* Responsive Design */
 @media (max-width: 600px) {
     .container {
-        padding: 0 0;
+        padding: 30px 30px;
         min-height: 100svh;
         height: 100svh;
         max-height: 100svh;
@@ -741,6 +741,7 @@ footer {
         overflow-y: auto;
         overflow-x: hidden;
         box-sizing: border-box;
+        /* Inherit desktop flexbox layout */
     }
 
     header h1 {
@@ -808,7 +809,7 @@ footer {
 
 @media (max-width: 400px) {
     .container {
-        padding: 0 0;
+        padding: 30px 30px;
         min-height: 100svh;
         height: 100svh;
         max-height: 100svh;
@@ -819,6 +820,7 @@ footer {
         overflow-y: auto;
         overflow-x: hidden;
         box-sizing: border-box;
+        /* Inherit desktop flexbox layout */
     }
     
     header h1 {
