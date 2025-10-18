@@ -72,6 +72,9 @@ const levelProgressBar = document.getElementById('levelProgressBar');
 const levelNumberDiv = document.getElementById('levelNumber');
 
 // DOM Elements - Classic Mode
+// Sound effects
+const correctSound = new Audio('sounds/correct_answer.mp3');
+const incorrectSound = new Audio('sounds/incorrect_answer.mp3');
 const livesContainer = document.getElementById('livesContainer');
 const livesDisplay = document.getElementById('livesDisplay');
 const highScoreDisplay = document.getElementById('highScoreDisplay');
@@ -366,6 +369,15 @@ function handleWordClick(selectedIndex) {
     const selectedWord = currentWords[selectedIndex];
     const correctIndex = currentWords.reduce((minIdx, word, idx, arr) => word.rank < arr[minIdx].rank ? idx : minIdx, 0);
     const isCorrect = selectedIndex === correctIndex;
+
+    // Play sound effect
+    if (isCorrect) {
+        correctSound.currentTime = 0;
+        correctSound.play();
+    } else {
+        incorrectSound.currentTime = 0;
+        incorrectSound.play();
+    }
 
     // Handle classic mode
     if (GAME_MODE === 'classic') {
