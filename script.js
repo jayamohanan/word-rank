@@ -99,7 +99,6 @@ async function startFreeMode() {
 // DOM Elements - Game
 const word1Btn = document.getElementById('word1');
 const word2Btn = document.getElementById('word2');
-const word3Btn = document.getElementById('word3');
 const feedbackDiv = document.getElementById('feedback');
 const nextBtn = document.getElementById('nextBtn');
 const roundNumber = document.getElementById('roundNumber');
@@ -383,10 +382,10 @@ function initializeApp() {
     }
 }
 
-// Get three random words
+// Get two random words
 function getRandomWords() {
     const shuffled = [...wordsData].sort(() => Math.random() - 0.5);
-    return [shuffled[0], shuffled[1], shuffled[2]];
+    return [shuffled[0], shuffled[1]];
 }
 
 // Helper function to convert to Title Case
@@ -463,22 +462,19 @@ function startNewRound() {
     // Update UI
     word1Btn.querySelector('.word-text').textContent = toTitleCase(currentWords[0].lemma);
     word2Btn.querySelector('.word-text').textContent = toTitleCase(currentWords[1].lemma);
-    word3Btn.querySelector('.word-text').textContent = toTitleCase(currentWords[2].lemma);
 
     // Reset styles
     word1Btn.className = 'word-tile';
     word2Btn.className = 'word-tile';
-    word3Btn.className = 'word-tile';
     word1Btn.disabled = false;
     word2Btn.disabled = false;
-    word3Btn.disabled = false;
 
     // Clear feedback
     feedbackDiv.textContent = '';
     feedbackDiv.className = 'feedback';
 
     // Clear icons
-    for (let i = 1; i <= 3; i++) {
+    for (let i = 1; i <= 2; i++) {
         document.getElementById('icon' + i).innerHTML = '';
     }
 
@@ -554,21 +550,17 @@ function handleWordClick(selectedIndex) {
 
     if (selectedIndex === 0) word1Btn.classList.add('correct');
     if (selectedIndex === 1) word2Btn.classList.add('correct');
-    if (selectedIndex === 2) word3Btn.classList.add('correct');
     if (!isCorrect) {
         if (selectedIndex === 0) word1Btn.classList.add('incorrect');
         if (selectedIndex === 1) word2Btn.classList.add('incorrect');
-        if (selectedIndex === 2) word3Btn.classList.add('incorrect');
         // Highlight correct word
         if (correctIndex === 0) word1Btn.classList.add('correct');
         if (correctIndex === 1) word2Btn.classList.add('correct');
-        if (correctIndex === 2) word3Btn.classList.add('correct');
     }
 
     // Disable buttons
     word1Btn.disabled = true;
     word2Btn.disabled = true;
-    word3Btn.disabled = true;
 
     // Show next button
     nextBtn.style.display = 'inline-block';
@@ -831,7 +823,6 @@ if (soundBtnHome) {
 // Event Listeners - Game
 word1Btn.addEventListener('click', () => handleWordClick(0));
 word2Btn.addEventListener('click', () => handleWordClick(1));
-word3Btn.addEventListener('click', () => handleWordClick(2));
 nextBtn.addEventListener('click', handleNextClick);
 
 // Info Modal Logic
