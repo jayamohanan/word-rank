@@ -24,10 +24,14 @@ window.addEventListener('orientationchange', setViewportHeight);
 // ============================================
 // GAME MODE CONFIGURATION
 // ============================================
-let GAME_MODE = 'levels'; // 'levels' or 'classic'
+// GAME_MODE: 'levels', 'classic', or 'free'
+let GAME_MODE = 'levels';
 let classicLives = 3;
 let classicScore = 0;
 let classicHighScore = 0;
+
+// Free mode state (no lives, no score, just infinite quiz)
+// No extra state needed; just use GAME_MODE === 'free'
 
 // Persistent level tracker
 function getCurrentLevel() {
@@ -59,7 +63,38 @@ const homePage = document.getElementById('homePage');
 const gamePage = document.getElementById('gamePage');
 const levelsBtn = document.getElementById('levelsBtn');
 const classicBtn = document.getElementById('classicBtn');
+const freeBtn = document.getElementById('freeBtn');
 const homeBtn = document.getElementById('homeBtn');
+// --- Free Mode Logic ---
+async function startFreeMode() {
+    // Always reload word data before starting
+    try {
+        const response = await fetch('word-rank.json');
+        wordsData = await response.json();
+        console.log(`Reloaded ${wordsData.length} words for Free mode`);
+    } catch (error) {
+        console.error('Error loading word data:', error);
+        feedbackDiv.textContent = 'Error: Game data not loaded. Please return to home and try again.';
+        feedbackDiv.style.color = '#ff4444';
+        return;
+    }
+    GAME_MODE = 'free';
+    homePage.style.display = 'none';
+    gamePage.style.display = 'block';
+    // Close info modal if it's open
+    if (infoModal) {
+        infoModal.style.display = 'none';
+    }
+    // Hide levels UI elements
+    levelProgressBar.style.display = 'none';
+    levelNumberDiv.style.display = 'none';
+    // Hide classic mode UI elements
+    livesContainer.style.display = 'none';
+    highScoreDisplay.style.display = 'none';
+    currentScoreDisplay.style.display = 'none';
+    // Start first round
+    startNewRound();
+}
 
 // DOM Elements - Game
 const word1Btn = document.getElementById('word1');
@@ -84,6 +119,7 @@ let audioContext;
 let correctSoundBuffer;
 let incorrectSoundBuffer;
 let audioInitialized = false;
+let soundEnabled = true; // Sound is enabled by default
 
 // Initialize AudioContext on first user interaction
 function initAudio() {
@@ -118,7 +154,7 @@ function initAudio() {
 
 // Play sound buffer
 function playSound(buffer) {
-    if (!audioContext || !buffer) return;
+    if (!audioContext || !buffer || !soundEnabled) return;
     
     try {
         // Resume context if suspended (iOS requirement)
@@ -132,6 +168,43 @@ function playSound(buffer) {
         source.start(0);
     } catch (err) {
         console.error('Error playing sound:', err);
+    }
+}
+
+// Toggle sound on/off
+function toggleSound() {
+    soundEnabled = !soundEnabled;
+    const soundBtn = document.getElementById('soundBtn');
+    const soundBtnHome = document.getElementById('soundBtnHome');
+    
+    // Update both buttons (home and game page)
+    [soundBtn, soundBtnHome].forEach(btn => {
+        if (btn) {
+            if (soundEnabled) {
+                btn.classList.remove('muted');
+            } else {
+                btn.classList.add('muted');
+            }
+        }
+    });
+    
+    // Save preference to localStorage
+    localStorage.setItem('soundEnabled', soundEnabled);
+}
+
+// Load sound preference from localStorage
+function loadSoundPreference() {
+    const saved = localStorage.getItem('soundEnabled');
+    if (saved !== null) {
+        soundEnabled = saved === 'true';
+        const soundBtn = document.getElementById('soundBtn');
+        const soundBtnHome = document.getElementById('soundBtnHome');
+        
+        // Update both buttons
+        if (!soundEnabled) {
+            if (soundBtn) soundBtn.classList.add('muted');
+            if (soundBtnHome) soundBtnHome.classList.add('muted');
+        }
     }
 }
 
@@ -374,11 +447,13 @@ function startNewRound() {
     if (GAME_MODE === 'levels') {
         const levelNumberDiv = document.getElementById('levelNumber');
         if (levelNumberDiv) levelNumberDiv.textContent = `Level ${currentLevel}`;
-        
         // Reset game answers if starting first round of level
         if ((currentRound - 1) % LEVELS_PER_SET === 0) {
             currentGameAnswers = [];
         }
+    } else if (GAME_MODE === 'free') {
+        // Hide level number in free mode
+        if (levelNumberDiv) levelNumberDiv.textContent = '';
     }
     
     // Reset state
@@ -414,6 +489,7 @@ function startNewRound() {
     if (GAME_MODE === 'levels') {
         renderLevelProgressBar();
     }
+    // In free mode, nothing to update
 }
 
 // Handle word selection
@@ -443,10 +519,12 @@ function handleWordClick(selectedIndex) {
             updateLivesDisplay();
         }
         currentScoreValue.textContent = classicScore;
-    } else {
+    } else if (GAME_MODE === 'levels') {
         // Handle levels mode
         levelResults[currentRound - 1] = isCorrect;
         currentGameAnswers.push(isCorrect);
+    } else if (GAME_MODE === 'free') {
+        // Free mode: nothing to update, just allow infinite play
     }
     
     // Update total correct count (only for achievements)
@@ -499,16 +577,21 @@ function handleWordClick(selectedIndex) {
     if (GAME_MODE === 'levels') {
         renderLevelProgressBar();
     }
+    // In free mode, nothing to update
 }
 
 // Handle next button click
 function handleNextClick() {
+    // Free mode: always start a new round, never ends
+    if (GAME_MODE === 'free') {
+        startNewRound();
+        return;
+    }
     // Check for game over in classic mode
     if (GAME_MODE === 'classic' && classicLives <= 0) {
         showSummaryModal();
         return;
     }
-    
     // Continue to next round
     if (GAME_MODE === 'classic') {
         startNewRound();
@@ -732,7 +815,18 @@ function showSummaryModal() {
 // Event Listeners - Mode Selection
 levelsBtn.addEventListener('click', startLevelsMode);
 classicBtn.addEventListener('click', startClassicMode);
+if (freeBtn) freeBtn.addEventListener('click', startFreeMode);
 homeBtn.addEventListener('click', goHome);
+
+// Event Listeners - Sound Toggle
+const soundBtn = document.getElementById('soundBtn');
+const soundBtnHome = document.getElementById('soundBtnHome');
+if (soundBtn) {
+    soundBtn.addEventListener('click', toggleSound);
+}
+if (soundBtnHome) {
+    soundBtnHome.addEventListener('click', toggleSound);
+}
 
 // Event Listeners - Game
 word1Btn.addEventListener('click', () => handleWordClick(0));
@@ -825,3 +919,6 @@ window.addEventListener('click', function(e) {
 
 // Load word data on startup
 loadWordData();
+
+// Load sound preference on startup
+loadSoundPreference();

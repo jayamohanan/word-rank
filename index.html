@@ -11,9 +11,20 @@
         <!-- Home Page -->
         <div id="homePage" class="home-page">
             <div class="top-bar">
-                <button class="info-btn" aria-label="Info" id="infoBtn">
-                    <span class="info-circle">?</span>
-                </button>
+                <div class="top-bar-spacer"></div>
+                <div class="top-bar-right">
+                    <button class="sound-btn" aria-label="Toggle Sound" id="soundBtnHome">
+                        <span class="sound-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 5L6 9H2v6h4l5 4V5z" stroke="#667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                <path class="sound-waves" d="M15.54 8.46a5 5 0 0 1 0 7.07M18.36 5.64a9 9 0 0 1 0 12.73" stroke="#667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                    </button>
+                    <button class="info-btn" aria-label="Info" id="infoBtn">
+                        <span class="info-circle">?</span>
+                    </button>
+                </div>
             </div>
             
             <header class="home-header">
@@ -24,6 +35,7 @@
             <div class="home-menu">
                 <button class="mode-btn" id="levelsBtn">Levels</button>
                 <button class="mode-btn" id="classicBtn">Classic</button>
+                <button class="mode-btn" id="freeBtn">Play</button>
             </div>
         </div>
 
@@ -33,9 +45,19 @@
                 <button class="home-btn" aria-label="Home" id="homeBtn">
                     <span class="home-icon">🏠</span>
                 </button>
-                <button class="info-btn" aria-label="Info" id="infoBtn2">
-                    <span class="info-circle">?</span>
-                </button>
+                <div class="top-bar-right">
+                    <button class="sound-btn" aria-label="Toggle Sound" id="soundBtn">
+                        <span class="sound-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 5L6 9H2v6h4l5 4V5z" stroke="#667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                <path class="sound-waves" d="M15.54 8.46a5 5 0 0 1 0 7.07M18.36 5.64a9 9 0 0 1 0 12.73" stroke="#667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                    </button>
+                    <button class="info-btn" aria-label="Info" id="infoBtn2">
+                        <span class="info-circle">?</span>
+                    </button>
+                </div>
             </div>
             <div id="highScoreDisplay" style="display: none; text-align: center; margin: 8px 0; font-size: 0.95rem; color: #667eea; font-weight: bold;">
                 High Score: <span id="highScoreValue">0</span>
