@@ -76,6 +76,8 @@ const livesContainer = document.getElementById('livesContainer');
 const livesDisplay = document.getElementById('livesDisplay');
 const highScoreDisplay = document.getElementById('highScoreDisplay');
 const highScoreValue = document.getElementById('highScoreValue');
+const currentScoreDisplay = document.getElementById('currentScoreDisplay');
+const currentScoreValue = document.getElementById('currentScoreValue');
 
 // DOM Elements - Modal
 const summaryModal = document.getElementById('summaryModal');
@@ -136,6 +138,7 @@ async function startLevelsMode() {
     // Hide classic mode UI elements
     livesContainer.style.display = 'none';
     highScoreDisplay.style.display = 'none';
+    currentScoreDisplay.style.display = 'none';
     // Reset level progress
     currentLevel = getCurrentLevel();
     currentRound = 1;
@@ -165,11 +168,13 @@ async function startClassicMode() {
     // Show classic mode UI elements
     livesContainer.style.display = 'block';
     highScoreDisplay.style.display = 'block';
+    currentScoreDisplay.style.display = 'flex';
     // Reset classic mode state
     classicLives = 3;
     classicScore = 0;
     classicHighScore = getClassicHighScore();
     highScoreValue.textContent = classicHighScore;
+    currentScoreValue.textContent = classicScore;
     updateLivesDisplay();
     startNewRound();
 }
@@ -358,6 +363,7 @@ function handleWordClick(selectedIndex) {
             classicLives--;
             updateLivesDisplay();
         }
+        currentScoreValue.textContent = classicScore;
     } else {
         // Handle levels mode
         levelResults[currentRound - 1] = isCorrect;

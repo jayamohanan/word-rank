@@ -37,15 +37,15 @@
                     <span class="info-circle">?</span>
                 </button>
             </div>
-            
-            <!-- Lives indicator (for Classic mode only) -->
+            <div id="highScoreDisplay" style="display: none; text-align: center; margin: 8px 0; font-size: 0.95rem; color: #667eea; font-weight: bold;">
+                High Score: <span id="highScoreValue">0</span>
+            </div>
             <div id="livesContainer" style="display: none; text-align: center; margin: 10px 0;">
                 <div id="livesDisplay"></div>
             </div>
-            
-            <!-- High score display (for Classic mode only) -->
-            <div id="highScoreDisplay" style="display: none; text-align: center; margin: 8px 0; font-size: 0.95rem; color: #667eea; font-weight: bold;">
-                High Score: <span id="highScoreValue">0</span>
+            <div id="levelNumber" style="font-size:1.1rem;color:#667eea;font-weight:bold;margin:6px 0 8px 0;">Level 1</div>
+            <div id="currentScoreDisplay" style="display: none; text-align: center; margin: 10px 0 0 0;">
+                <span id="currentScoreValue" style="font-size:2.2rem; font-weight: bold; letter-spacing: 1px;">0</span>
             </div>
         
         <!-- Achievements Popup Modal -->
@@ -57,10 +57,7 @@
             </div>
         </div>
         
-        <header>
-            <h1>Most Used Word</h1>
-            <div id="levelNumber" style="font-size:1.1rem;color:#667eea;font-weight:bold;margin:6px 0 8px 0;">Level 1</div>
-        </header>
+    <!-- Removed duplicate header -->
         <div class="level-progress-bar" id="levelProgressBar"></div>
         <div class="instructions" style="margin-bottom: 28px; margin-top: 10px;">
             Guess the most commonly used word in English?
