@@ -486,19 +486,15 @@ function showSummaryModal() {
             classicHighScore = classicScore;
             setClassicHighScore(classicScore);
         }
-        
         // Hide game area
         document.getElementById('gameArea').style.display = 'none';
-        
         const modalContent = summaryModal.querySelector('.modal-content');
         summaryTitle.textContent = 'Game Over!';
         summaryScore.textContent = `Your Score: ${classicScore}`;
         summaryCorrect.textContent = '';
         summaryWrong.textContent = '';
-        
         // Clear previous custom elements
         Array.from(modalContent.querySelectorAll('.summary-extra')).forEach(e => e.remove());
-        
         // Show high score message
         if (isNewHighScore && classicScore > 0) {
             const highScoreMsg = document.createElement('div');
@@ -513,13 +509,11 @@ function showSummaryModal() {
             highScoreMsg.textContent = `High Score: ${classicHighScore}`;
             modalContent.appendChild(highScoreMsg);
         }
-        
         // Replace buttons
         summaryButtons.innerHTML = '';
-        
         const retryBtn = document.createElement('button');
         retryBtn.textContent = 'Retry';
-        retryBtn.style = 'margin:18px 8px 0 0;padding:10px 30px;border-radius:8px;background:linear-gradient(135deg,#43e97b 0%,#38f9d7 100%);color:#fff;font-weight:bold;border:none;cursor:pointer;';
+        retryBtn.style = 'margin:18px 0 0 0;padding:10px 30px;border-radius:8px;background:linear-gradient(135deg,#43e97b 0%,#38f9d7 100%);color:#fff;font-weight:bold;border:none;cursor:pointer;';
         retryBtn.onclick = () => {
             console.log('Retry clicked. wordsData length:', wordsData ? wordsData.length : 'undefined');
             summaryModal.style.display = 'none';
@@ -536,17 +530,7 @@ function showSummaryModal() {
                 startClassicMode();
             }
         };
-        
-        const homeButton = document.createElement('button');
-        homeButton.textContent = 'Home';
-        homeButton.style = 'margin:18px 0 0 8px;padding:10px 30px;border-radius:8px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;font-weight:bold;border:none;cursor:pointer;';
-        homeButton.onclick = () => {
-            goHome();
-        };
-        
         summaryButtons.appendChild(retryBtn);
-        summaryButtons.appendChild(homeButton);
-        
     } else {
         // Levels mode summary
         const setStart = Math.floor((currentRound - 2) / LEVELS_PER_SET) * LEVELS_PER_SET;
