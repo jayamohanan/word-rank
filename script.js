@@ -5,6 +5,23 @@
 const ACHIEVEMENTS_ENABLED = false;
 
 // ============================================
+// VIEWPORT HEIGHT FIX FOR MOBILE BROWSERS
+// Fixes issues with 100vh on mobile (URL bars, etc.)
+// ============================================
+function setViewportHeight() {
+    // Use window.innerHeight to get the actual visible height
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+
+// Initialize viewport height
+setViewportHeight();
+
+// Update on resize and orientation change
+window.addEventListener('resize', setViewportHeight);
+window.addEventListener('orientationchange', setViewportHeight);
+
+// ============================================
 // GAME MODE CONFIGURATION
 // ============================================
 let GAME_MODE = 'levels'; // 'levels' or 'classic'

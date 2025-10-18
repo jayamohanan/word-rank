@@ -1,3 +1,8 @@
+/* CSS Variables for viewport height fix */
+:root {
+    --vh: 1vh;
+}
+
 .achievement-text .achievement-name {
     font-weight: bold;
     font-size: 1rem;
@@ -345,6 +350,7 @@ body {
     flex-direction: column;
     justify-content: flex-start;
     overflow-y: auto;
+    box-sizing: border-box;
 }
 
 header h1 {
@@ -722,14 +728,16 @@ footer {
 /* Responsive Design */
 @media (max-width: 600px) {
     .container {
-        padding: 20px 15px;
+        padding: 16px 15px;
+        padding-bottom: max(16px, env(safe-area-inset-bottom));
         min-height: 0;
-        max-height: 100vh;
-        height: 100vh;
+        max-height: calc(var(--vh, 1vh) * 100);
+        height: calc(var(--vh, 1vh) * 100);
         aspect-ratio: auto;
         border-radius: 0;
         max-width: 100%;
         overflow-y: auto;
+        overflow-x: hidden;
     }
 
     header h1 {
@@ -795,9 +803,20 @@ footer {
     }
 }
 
+/* Modern viewport units support for better mobile browser handling */
+@supports (height: 100svh) {
+    @media (max-width: 600px) {
+        .container {
+            height: 100svh;
+            max-height: 100svh;
+        }
+    }
+}
+
 @media (max-width: 400px) {
     .container {
-        padding: 15px 12px;
+        padding: 14px 12px;
+        padding-bottom: max(14px, env(safe-area-inset-bottom));
     }
     
     header h1 {
