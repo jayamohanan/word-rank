@@ -132,6 +132,10 @@ async function startLevelsMode() {
     GAME_MODE = 'levels';
     homePage.style.display = 'none';
     gamePage.style.display = 'block';
+    // Close info modal if it's open
+    if (infoModal) {
+        infoModal.style.display = 'none';
+    }
     // Show levels UI elements
     levelProgressBar.style.display = 'flex';
     levelNumberDiv.style.display = 'block';
@@ -162,6 +166,10 @@ async function startClassicMode() {
     GAME_MODE = 'classic';
     homePage.style.display = 'none';
     gamePage.style.display = 'block';
+    // Close info modal if it's open
+    if (infoModal) {
+        infoModal.style.display = 'none';
+    }
     // Hide levels UI elements
     levelProgressBar.style.display = 'none';
     levelNumberDiv.style.display = 'none';
@@ -183,6 +191,10 @@ function goHome() {
     gamePage.style.display = 'none';
     homePage.style.display = 'flex';
     summaryModal.style.display = 'none';
+    // Close info modal if it's open
+    if (infoModal) {
+        infoModal.style.display = 'none';
+    }
 }
 
 // Initialize Game
@@ -692,6 +704,38 @@ const infoModal = document.getElementById('infoModal');
 const closeModal = document.getElementById('closeModal');
 const wordTableBody = document.querySelector('#wordTable tbody');
 
+// Function to open info modal and populate table
+function openInfoModal() {
+
+    if (infoModal) {
+        infoModal.style.display = 'flex';
+        if (wordTableBody && wordsData.length > 0 && wordTableBody.childElementCount === 0) {
+            // Fill table with first 200 words
+            let rows = '';
+            for (let i = 0; i < Math.min(200, wordsData.length); i++) {
+                rows += `<tr><td>${wordsData[i].rank}</td><td>${toTitleCase(wordsData[i].lemma)}</td></tr>`;
+            }
+            wordTableBody.innerHTML = rows;
+        }
+    }
+}
+
+if (infoBtn) {
+    infoBtn.addEventListener('click', openInfoModal);
+}
+
+if (infoBtn2) {
+    infoBtn2.addEventListener('click', openInfoModal);
+}
+
+if (closeModal) {
+    closeModal.addEventListener('click', function() {
+        if (infoModal) {
+            infoModal.style.display = 'none';
+        }
+    });
+}
+
 // Achievements modal logic (conditional based on ACHIEVEMENTS_ENABLED)
 if (ACHIEVEMENTS_ENABLED) {
     const trophyBtn = document.getElementById('trophyBtn');
@@ -724,46 +768,15 @@ if (ACHIEVEMENTS_ENABLED) {
     }
 }
 
-if (infoBtn) {
-    infoBtn.addEventListener('click', function() {
-        infoModal.style.display = 'flex';
-        if (wordTableBody && wordsData.length > 0 && wordTableBody.childElementCount === 0) {
-            // Fill table with first 200 words
-            let rows = '';
-            for (let i = 0; i < Math.min(200, wordsData.length); i++) {
-                rows += `<tr><td>${wordsData[i].rank}</td><td>${toTitleCase(wordsData[i].lemma)}</td></tr>`;
-            }
-            wordTableBody.innerHTML = rows;
-        }
-    });
-}
-
-if (infoBtn2) {
-    infoBtn2.addEventListener('click', function() {
-        infoModal.style.display = 'flex';
-        if (wordTableBody && wordsData.length > 0 && wordTableBody.childElementCount === 0) {
-            // Fill table with first 200 words
-            let rows = '';
-            for (let i = 0; i < Math.min(200, wordsData.length); i++) {
-                rows += `<tr><td>${wordsData[i].rank}</td><td>${toTitleCase(wordsData[i].lemma)}</td></tr>`;
-            }
-            wordTableBody.innerHTML = rows;
-        }
-    });
-}
-
-if (closeModal) {
-    closeModal.addEventListener('click', function() {
-        infoModal.style.display = 'none';
-    });
-}
-
 window.addEventListener('click', function(e) {
-    if (e.target === infoModal) {
+    if (infoModal && e.target === infoModal) {
         infoModal.style.display = 'none';
     }
-    if (e.target === achievementsModal) {
-        achievementsModal.style.display = 'none';
+    if (ACHIEVEMENTS_ENABLED) {
+        const achievementsModal = document.getElementById('achievementsModal');
+        if (achievementsModal && e.target === achievementsModal) {
+            achievementsModal.style.display = 'none';
+        }
     }
 });
 

@@ -85,7 +85,7 @@
     box-shadow: 0 2px 8px rgba(255,215,0,0.08);
     border: 2px solid #FFD700;
     transition: background 0.2s, box-shadow 0.2s;
-    pointer-events: none;
+    /* pointer-events removed to allow button clicks */
 }
 .trophy-btn:focus .trophy-circle,
 .trophy-btn:hover .trophy-circle {
@@ -235,6 +235,7 @@
     z-index: 10;
     outline: none;
     padding: 0;
+    pointer-events: auto;     /* Ensure button is clickable */
 }
 /* Ensure header is positioned relative for absolute icon placement */
 .container header {
@@ -619,6 +620,7 @@ footer {
     padding-top: 0;           /* Remove extra top padding */
     padding-right: 0;
     background: transparent;
+    z-index: 100;             /* Ensure top bar is above other elements */
 }
 
 /* Home Page Styles */
