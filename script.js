@@ -75,6 +75,17 @@ const levelNumberDiv = document.getElementById('levelNumber');
 // Sound effects
 const correctSound = new Audio('sounds/correct_answer.mp3');
 const incorrectSound = new Audio('sounds/incorrect_answer.mp3');
+// Preload audio
+correctSound.load();
+incorrectSound.load();
+
+// Unlock audio on first user interaction (mobile fix)
+function unlockAudio() {
+    correctSound.play().then(() => correctSound.pause());
+    incorrectSound.play().then(() => incorrectSound.pause());
+}
+window.addEventListener('touchstart', unlockAudio, { once: true });
+window.addEventListener('click', unlockAudio, { once: true });
 const livesContainer = document.getElementById('livesContainer');
 const livesDisplay = document.getElementById('livesDisplay');
 const highScoreDisplay = document.getElementById('highScoreDisplay');
