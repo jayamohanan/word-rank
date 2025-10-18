@@ -72,56 +72,6 @@ const levelProgressBar = document.getElementById('levelProgressBar');
 const levelNumberDiv = document.getElementById('levelNumber');
 
 // DOM Elements - Classic Mode
-// Sound effects
-// --- Audio Handling ---
-let audioContext;
-let correctBuffer, incorrectBuffer;
-let audioUnlocked = false;
-
-function loadAudioBuffer(url, callback) {
-    fetch(url)
-        .then(response => response.arrayBuffer())
-        .then(arrayBuffer => {
-            audioContext.decodeAudioData(arrayBuffer, buffer => {
-                callback(buffer);
-            });
-        });
-}
-
-function playBuffer(buffer) {
-    if (!audioUnlocked || !buffer) return;
-    const source = audioContext.createBufferSource();
-    source.buffer = buffer;
-    source.connect(audioContext.destination);
-    source.start(0);
-}
-
-function unlockAudioContext() {
-    if (!audioContext) {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    // Play a silent sound to unlock
-    const buffer = audioContext.createBuffer(1, 1, 22050);
-    const source = audioContext.createBufferSource();
-    source.buffer = buffer;
-    source.connect(audioContext.destination);
-    source.start(0);
-    audioUnlocked = true;
-}
-
-// Unlock and load buffers once at app start
-window.addEventListener('touchstart', () => {
-    if (!audioUnlocked) unlockAudioContext();
-}, { once: true });
-window.addEventListener('click', () => {
-    if (!audioUnlocked) unlockAudioContext();
-}, { once: true });
-
-window.addEventListener('DOMContentLoaded', () => {
-    if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    loadAudioBuffer('sounds/correct_answer.mp3', buffer => { correctBuffer = buffer; });
-    loadAudioBuffer('sounds/incorrect_answer.mp3', buffer => { incorrectBuffer = buffer; });
-});
 const livesContainer = document.getElementById('livesContainer');
 const livesDisplay = document.getElementById('livesDisplay');
 const highScoreDisplay = document.getElementById('highScoreDisplay');
@@ -417,12 +367,7 @@ function handleWordClick(selectedIndex) {
     const correctIndex = currentWords.reduce((minIdx, word, idx, arr) => word.rank < arr[minIdx].rank ? idx : minIdx, 0);
     const isCorrect = selectedIndex === correctIndex;
 
-    // Play sound effect using AudioContext buffers
-    if (isCorrect) {
-        playBuffer(correctBuffer);
-    } else {
-        playBuffer(incorrectBuffer);
-    }
+    // No sound effect
 
     // Handle classic mode
     if (GAME_MODE === 'classic') {
