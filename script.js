@@ -218,7 +218,6 @@ function initializeApp() {
 
 // Get three random words
 function getRandomWords() {
-    console.log('get random called');
     const shuffled = [...wordsData].sort(() => Math.random() - 0.5);
     return [shuffled[0], shuffled[1], shuffled[2]];
 }
@@ -269,7 +268,6 @@ function renderLevelProgressBar() {
 
 // Start a new round
 function startNewRound() {
-    console.log('start new round');
     // Validate that word data is loaded
     if (!wordsData || wordsData.length === 0) {
         console.error('Cannot start round: Word data not loaded!');
@@ -297,9 +295,6 @@ function startNewRound() {
     word1Btn.querySelector('.word-text').textContent = toTitleCase(currentWords[0].lemma);
     word2Btn.querySelector('.word-text').textContent = toTitleCase(currentWords[1].lemma);
     word3Btn.querySelector('.word-text').textContent = toTitleCase(currentWords[2].lemma);
-console.log(word1Btn.querySelector('.word-text').textContent);
-console.log(word2Btn.querySelector('.word-text').textContent);
-console.log(word3Btn.querySelector('.word-text').textContent);
 
     // Reset styles
     word1Btn.className = 'word-tile';
@@ -325,9 +320,6 @@ console.log(word3Btn.querySelector('.word-text').textContent);
     if (GAME_MODE === 'levels') {
         renderLevelProgressBar();
     }
-    console.log('word1Btn.className:', word1Btn.className);
-    console.log('word2Btn.className:', word2Btn.className);
-    console.log('word3Btn.className:', word3Btn.className);
 }
 
 // Handle word selection
@@ -482,7 +474,7 @@ function showSummaryModal() {
         retryBtn.onclick = () => {
             console.log('Retry clicked. wordsData length:', wordsData ? wordsData.length : 'undefined');
             summaryModal.style.display = 'none';
-            
+            document.getElementById('gameArea').style.display = '';
             // Check if data is loaded
             if (!wordsData || wordsData.length === 0) {
                 console.error('Retry failed: wordsData not loaded. Reloading...');
