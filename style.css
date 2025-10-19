@@ -1,3 +1,20 @@
+/* DEBUG COLORS FOR GAME PAGE LAYOUT VISUALIZATION */
+#gamePage > .top-bar-area {
+    background: #ffe4e1 !important;
+}
+#gamePage > .progress-area {
+    background: #e1f7ff !important;
+}
+#gamePage > .main-game-area {
+    background: #e1ffe4 !important;
+}
+#gamePage > .feedback-area {
+    background: #fffbe1 !important;
+}
+#gamePage{
+    background: #2d38fd !important;
+}
+
 .shake {
     animation: shake 0.16s cubic-bezier(.36,.07,.19,.97) both;
 }
