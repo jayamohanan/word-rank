@@ -607,8 +607,6 @@ function showSummaryModal() {
             classicHighScore = classicScore;
             setClassicHighScore(classicScore);
         }
-        // Hide game area
-        document.getElementById('gameArea').style.display = 'none';
         const modalContent = summaryModal.querySelector('.modal-content');
         summaryTitle.textContent = 'Game Over!';
         summaryScore.textContent = `Your Score: ${classicScore}`;
@@ -638,7 +636,6 @@ function showSummaryModal() {
         retryBtn.onclick = () => {
             console.log('Retry clicked. wordsData length:', wordsData ? wordsData.length : 'undefined');
             summaryModal.style.display = 'none';
-            document.getElementById('gameArea').style.display = '';
             // Check if data is loaded
             if (!wordsData || wordsData.length === 0) {
                 console.error('Retry failed: wordsData not loaded. Reloading...');
@@ -687,8 +684,6 @@ function showSummaryModal() {
             setCurrentLevel(currentLevel);
         }
         
-        // Hide game area
-        document.getElementById('gameArea').style.display = 'none';
         levelProgressBar.style.display = 'none';
         
         const modalContent = summaryModal.querySelector('.modal-content');
@@ -757,7 +752,6 @@ function showSummaryModal() {
             retryBtn.onclick = function() {
                 console.log('Levels retry clicked. wordsData length:', wordsData ? wordsData.length : 'undefined');
                 summaryModal.style.display = 'none';
-                document.getElementById('gameArea').style.display = '';
                 levelProgressBar.style.display = '';
                 currentRound = (currentLevel - 1) * LEVELS_PER_SET + 1;
                 // Check if data is loaded
@@ -782,7 +776,6 @@ function showSummaryModal() {
             nextBtn.onclick = function() {
                 console.log('Levels next clicked. wordsData length:', wordsData ? wordsData.length : 'undefined');
                 summaryModal.style.display = 'none';
-                document.getElementById('gameArea').style.display = '';
                 levelProgressBar.style.display = '';
                 // Check if data is loaded
                 if (!wordsData || wordsData.length === 0) {

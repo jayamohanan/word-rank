@@ -40,36 +40,75 @@
         </div>
 
         <!-- Game Page -->
-        <div id="gamePage" style="display: none;">
-            <div class="top-bar">
-                <button class="home-btn" aria-label="Home" id="homeBtn">
-                    <span class="home-icon">🏠</span>
-                </button>
-                <div class="top-bar-right">
-                    <button class="sound-btn" aria-label="Toggle Sound" id="soundBtn">
-                        <span class="sound-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M11 5L6 9H2v6h4l5 4V5z" stroke="#667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                                <path class="sound-waves" d="M15.54 8.46a5 5 0 0 1 0 7.07M18.36 5.64a9 9 0 0 1 0 12.73" stroke="#667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </span>
+        <div id="gamePage" class="game-viewport" style="display: none;">
+            <!-- TOP BAR AREA - Fixed 8% height -->
+            <div class="top-bar-area">
+                <div class="top-bar">
+                    <button class="home-btn" aria-label="Home" id="homeBtn">
+                        <span class="home-icon">🏠</span>
                     </button>
-                    <button class="info-btn" aria-label="Info" id="infoBtn2">
-                        <span class="info-circle">?</span>
-                    </button>
+                    <div class="top-bar-right">
+                        <button class="sound-btn" aria-label="Toggle Sound" id="soundBtn">
+                            <span class="sound-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M11 5L6 9H2v6h4l5 4V5z" stroke="#667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                    <path class="sound-waves" d="M15.54 8.46a5 5 0 0 1 0 7.07M18.36 5.64a9 9 0 0 1 0 12.73" stroke="#667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                        </button>
+                        <button class="info-btn" aria-label="Info" id="infoBtn2">
+                            <span class="info-circle">?</span>
+                        </button>
+                    </div>
                 </div>
             </div>
-            <div id="highScoreDisplay" style="display: none; text-align: center; margin: 8px 0; font-size: 0.95rem; color: #667eea; font-weight: bold;">
-                High Score: <span id="highScoreValue">0</span>
+
+            <!-- PROGRESS AREA - Fixed 15% height -->
+            <div class="progress-area">
+                <div id="highScoreDisplay" style="display: none; text-align: center; font-size: 0.95rem; color: #667eea; font-weight: bold;">
+                    High Score: <span id="highScoreValue">0</span>
+                </div>
+                <div id="livesContainer" style="display: none; text-align: center;">
+                    <div id="livesDisplay"></div>
+                </div>
+                <div id="levelNumber" style="font-size:1.1rem;color:#667eea;font-weight:bold;">Level 1</div>
+                <div id="currentScoreDisplay" style="display: none; text-align: center;">
+                    <span id="currentScoreValue" style="font-size:2.2rem; font-weight: bold; letter-spacing: 1px;">0</span>
+                </div>
+                <div class="level-progress-bar" id="levelProgressBar"></div>
             </div>
-            <div id="livesContainer" style="display: none; text-align: center; margin: 10px 0;">
-                <div id="livesDisplay"></div>
+
+            <!-- MAIN GAME AREA - Flexible, takes remaining space (minimum 55%) -->
+            <div class="main-game-area">
+                <div class="instructions">
+                    Guess the most commonly used word in English?
+                </div>
+
+                <div class="word-tiles" id="wordTiles">
+                    <div class="option-row">
+                        <button id="word1" class="word-tile" disabled>
+                            <span class="word-text"></span>
+                        </button>
+                        <span id="icon1"></span>
+                    </div>
+                    <div class="option-row">
+                        <button id="word2" class="word-tile" disabled>
+                            <span class="word-text"></span>
+                        </button>
+                        <span id="icon2"></span>
+                    </div>
+                </div>
             </div>
-            <div id="levelNumber" style="font-size:1.1rem;color:#667eea;font-weight:bold;margin:6px 0 8px 0;">Level 1</div>
-            <div id="currentScoreDisplay" style="display: none; text-align: center; margin: 10px 0 0 0;">
-                <span id="currentScoreValue" style="font-size:2.2rem; font-weight: bold; letter-spacing: 1px;">0</span>
+
+            <!-- FEEDBACK AREA - Fixed 22% height -->
+            <div class="feedback-area">
+                <div class="feedback" id="feedback"></div>
+                <div class="controls" id="controls">
+                    <button class="next-btn" id="nextBtn" style="display: none;">Next</button>
+                </div>
             </div>
-        
+        </div>
+
         <!-- Achievements Popup Modal -->
         <div id="achievementsModal" class="modal" style="display:none;">
             <div class="modal-content" style="max-width:340px;">
@@ -77,12 +116,6 @@
                 <h2 style="margin-bottom:10px;">Achievements</h2>
                 <div id="achievementsList"></div>
             </div>
-        </div>
-        
-    <!-- Removed duplicate header -->
-        <div class="level-progress-bar" id="levelProgressBar"></div>
-        <div class="instructions" style="margin-bottom: 28px; margin-top: 10px;">
-            Guess the most commonly used word in English?
         </div>
 
         <!-- Info Popup Modal -->
@@ -116,29 +149,6 @@
                 </div>
             </div>
         </div>
-
-        <main id="gameArea">
-            <div class="word-tiles" id="wordTiles">
-                <div class="option-row">
-                    <button id="word1" class="word-tile" disabled>
-                        <span class="word-text"></span>
-                    </button>
-                    <span id="icon1"></span>
-                </div>
-                <div class="option-row">
-                    <button id="word2" class="word-tile" disabled>
-                        <span class="word-text"></span>
-                    </button>
-                    <span id="icon2"></span>
-                </div>
-            </div>
-
-            <div class="feedback" id="feedback"></div>
-
-            <div class="controls" id="controls">
-                <button class="next-btn" id="nextBtn" style="display: none;">Next</button>
-            </div>
-        </main>
 
         <!-- Game Summary Modal -->
         <div id="summaryModal" class="modal" style="display:none;">
