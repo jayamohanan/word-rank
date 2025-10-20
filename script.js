@@ -927,10 +927,22 @@ function getDeviceInfo() {
     } else {
         visualViewportInfo = '<strong>Visual Viewport:</strong> Not supported<br>';
     }
+    // svh and dvh values
+    let svh = null, dvh = null;
+    if (CSS && CSS.supports && CSS.supports('height: 100svh')) {
+        svh = window.innerHeight;
+    }
+    if (CSS && CSS.supports && CSS.supports('height: 100dvh')) {
+        dvh = window.innerHeight;
+    }
+    let vhInfo = '';
+    vhInfo += `<strong>100svh:</strong> ${svh ? svh.toFixed(2) : 'Not supported'} px<br>`;
+    vhInfo += `<strong>100dvh:</strong> ${dvh ? dvh.toFixed(2) : 'Not supported'} px<br>`;
     return `
         <strong>Screen Resolution:</strong> ${screenW} × ${screenH} px<br>
         <strong>CSS Resolution:</strong> ${cssW} × ${cssH} px<br>
         ${visualViewportInfo}
+        ${vhInfo}
         <strong>Device Pixel Ratio:</strong> ${dpr}<br>
         <strong>Media Query Category:</strong> ${category}
     `;
@@ -938,7 +950,7 @@ function getDeviceInfo() {
 
 deviceInfoBtn.addEventListener('click', function() {
     deviceInfoContent.innerHTML = getDeviceInfo();
-    deviceInfoModal.style.display = 'block';
+    deviceInfoModal.style.display = 'flex';
 });
 
 closeDeviceInfo.addEventListener('click', function() {

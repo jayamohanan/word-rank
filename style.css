@@ -925,6 +925,34 @@ footer {
     display: inline-block;
 }
 
+/* Device Info Modal Styles */
+#deviceInfoModal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    /* Use flexbox to center content */
+    display: flex;
+}
+#deviceInfoModal .modal-content {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    padding: 30px 20px;
+    max-width: 340px;
+    width: 90vw;
+    position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
+    margin: 0 auto;
+}
+
 /* Responsive Design */
 @media (max-width: 600px) {
     body {
