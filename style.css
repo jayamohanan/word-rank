@@ -996,6 +996,7 @@ footer {
 @media (max-width: 400px) {
     .container {
         padding: 12px;
+        background: #00c851;
     }
     
     .top-bar-area {
