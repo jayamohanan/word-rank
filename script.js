@@ -929,15 +929,17 @@ function getDeviceInfo() {
     } else {
         visualViewportInfo = '<strong>Visual Viewport:</strong> Not supported<br>';
     }
-    // svh and dvh values
-    let svh = null, dvh = null;
+    // svh, dvh, and vh values
+    let svh = null, dvh = null, vh = null;
     if (CSS && CSS.supports && CSS.supports('height: 100svh')) {
         svh = window.innerHeight;
     }
     if (CSS && CSS.supports && CSS.supports('height: 100dvh')) {
         dvh = window.innerHeight;
     }
+    vh = window.innerHeight; // 100vh is always window.innerHeight in JS
     let vhInfo = '';
+    vhInfo += `<strong>100vh:</strong> ${vh ? vh.toFixed(2) : 'Not supported'} px<br>`;
     vhInfo += `<strong>100svh:</strong> ${svh ? svh.toFixed(2) : 'Not supported'} px<br>`;
     vhInfo += `<strong>100dvh:</strong> ${dvh ? dvh.toFixed(2) : 'Not supported'} px<br>`;
     return `
