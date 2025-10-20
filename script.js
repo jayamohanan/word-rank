@@ -941,9 +941,8 @@ function getDeviceInfo() {
     vhInfo += `<strong>100svh:</strong> ${svh ? svh.toFixed(2) : 'Not supported'} px<br>`;
     vhInfo += `<strong>100dvh:</strong> ${dvh ? dvh.toFixed(2) : 'Not supported'} px<br>`;
     return `
-        <strong>Physical Device Resolution:</strong> ${physicalW} × ${physicalH} px<br>
-        <strong>Screen Resolution (CSS):</strong> ${screenW} × ${screenH} px<br>
-        <strong>CSS Resolution:</strong> ${cssW} × ${cssH} px<br>
+        <strong>Physical Resolution:</strong> ${physicalW} × ${physicalH} px<br>
+        <strong>CSS Resolution:</strong> ${screenW} × ${screenH} px<br>
         ${visualViewportInfo}
         ${vhInfo}
         <strong>Device Pixel Ratio:</strong> ${dpr}<br>
