@@ -1,5 +1,5 @@
 /* DEBUG COLORS FOR GAME PAGE LAYOUT VISUALIZATION */
-/* #gamePage > .top-bar-area {
+#gamePage > .top-bar-area {
     background: #ffe4e1 !important;
 }
 #gamePage > .progress-area {
@@ -13,7 +13,7 @@
 }
 #gamePage{
     background: #2d38fd !important;
-} */
+}
 
 /* .shake {
     animation: shake 0.16s cubic-bezier(.36,.07,.19,.97) both;
@@ -660,7 +660,7 @@ footer {
 .progress-area {
     flex: 0 0 15%;
     min-height: 80px;
-    max-height: 120px;
+    max-height: 200px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -671,7 +671,7 @@ footer {
 
 /* MAIN GAME AREA - Takes remaining space, minimum 55% */
 .main-game-area {
-    flex: 1 1 55%;
+    flex: 1 1 60%;
     display: flex;
     flex-direction: column;
     justify-content: center;
