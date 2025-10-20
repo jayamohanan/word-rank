@@ -913,6 +913,8 @@ function getDeviceInfo() {
     const cssW = window.innerWidth;
     const cssH = window.innerHeight;
     const dpr = window.devicePixelRatio;
+    const physicalW = Math.round(window.screen.width * dpr);
+    const physicalH = Math.round(window.screen.height * dpr);
     let category = '';
     if (cssW <= 400) {
         category = 'Matches 400px media query';
@@ -939,7 +941,8 @@ function getDeviceInfo() {
     vhInfo += `<strong>100svh:</strong> ${svh ? svh.toFixed(2) : 'Not supported'} px<br>`;
     vhInfo += `<strong>100dvh:</strong> ${dvh ? dvh.toFixed(2) : 'Not supported'} px<br>`;
     return `
-        <strong>Screen Resolution:</strong> ${screenW} × ${screenH} px<br>
+        <strong>Physical Device Resolution:</strong> ${physicalW} × ${physicalH} px<br>
+        <strong>Screen Resolution (CSS):</strong> ${screenW} × ${screenH} px<br>
         <strong>CSS Resolution:</strong> ${cssW} × ${cssH} px<br>
         ${visualViewportInfo}
         ${vhInfo}
