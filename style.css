@@ -993,38 +993,229 @@ footer {
     }
 }
 
+/* iPhone SE and smaller screens */
 @media (max-width: 400px) {
     .container {
-        padding: 12px;
-        background: #3939a7;
+        padding: 10px;
     }
     
+    /* Game Scene Adjustments */
     .top-bar-area {
-        min-height: 32px;
+        min-height: 28px;
         padding: 4px 8px;
     }
     
     .progress-area {
-        min-height: 60px;
+        min-height: 50px;
         padding: 4px 8px;
+        gap: 4px;
     }
     
     .main-game-area {
-        padding: 8px 12px;
+        padding: 8px 10px;
     }
     
     .feedback-area {
-        min-height: 80px;
-        padding: 8px 12px 12px;
+        min-height: 70px;
+        padding: 8px 10px 10px;
     }
     
     .word-tile {
-        font-size: 1.3rem;
-        padding: 14px 16px;
-        min-height: 44px;
+        font-size: 1.2rem;
+        padding: 12px 14px;
+        min-height: 42px;
     }
     
     .word-text {
+        font-size: 1.4rem;
+    }
+    
+    .instructions {
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+    }
+    
+    .feedback {
+        font-size: 1.1rem;
+    }
+    
+    .next-btn {
+        padding: 12px 30px;
+        font-size: 1rem;
+    }
+    
+    /* Home Page Adjustments */
+    .home-header {
+        margin-top: 20px;
+        margin-bottom: 15px;
+    }
+    
+    .home-header h1 {
+        font-size: 1.8rem;
+        margin-bottom: 6px;
+    }
+    
+    .home-subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .home-menu {
+        gap: 15px;
+        margin: 20px auto 30px auto;
+        padding: 0 15px;
+    }
+    
+    .mode-btn {
+        padding: 14px 30px;
+        font-size: 1.4rem;
+        min-height: 48px;
+        max-height: 58px;
+    }
+    
+    /* Top bar icons smaller */
+    .sound-icon,
+    .info-circle,
+    .home-icon {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .sound-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    /* Level circles smaller */
+    .level-circle {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .level-progress-bar {
+        min-height: 28px;
+        gap: 1px;
+        margin-top: 6px;
+    }
+    
+    #currentScoreValue {
+        font-size: 1.8rem;
+    }
+}
+
+/* Extra small screens (iPhone SE, etc - 375px and below) */
+@media (max-width: 375px) {
+    .container {
+        padding: 8px;
+    }
+    
+    /* Further reduce spacing for very small screens */
+    .top-bar-area {
+        min-height: 26px;
+        padding: 3px 6px;
+    }
+    
+    .progress-area {
+        min-height: 45px;
+        padding: 3px 6px;
+        gap: 3px;
+    }
+    
+    .main-game-area {
+        padding: 6px 8px;
+    }
+    
+    .feedback-area {
+        min-height: 60px;
+        padding: 6px 8px 8px;
+        gap: 6px;
+    }
+    
+    .word-tile {
+        font-size: 1.1rem;
+        padding: 10px 12px;
+        min-height: 40px;
+        gap: 12px;
+    }
+    
+    .word-tiles {
+        gap: 12px;
+    }
+    
+    .word-text {
+        font-size: 1.3rem;
+    }
+    
+    .instructions {
+        font-size: 0.85rem;
+        margin-bottom: 8px;
+    }
+    
+    .feedback {
+        font-size: 1rem;
+    }
+    
+    .next-btn {
+        padding: 10px 25px;
+        font-size: 0.95rem;
+    }
+    
+    /* Home Page - more compact */
+    .home-header {
+        margin-top: 15px;
+        margin-bottom: 12px;
+    }
+    
+    .home-header h1 {
         font-size: 1.6rem;
+        margin-bottom: 5px;
+    }
+    
+    .home-subtitle {
+        font-size: 0.85rem;
+    }
+    
+    .home-menu {
+        gap: 12px;
+        margin: 15px auto 20px auto;
+        padding: 0 12px;
+    }
+    
+    .mode-btn {
+        padding: 12px 25px;
+        font-size: 1.3rem;
+        min-height: 44px;
+        max-height: 54px;
+    }
+    
+    /* Icons even smaller */
+    .sound-icon,
+    .info-circle,
+    .home-icon {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .sound-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .level-circle {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .level-progress-bar {
+        min-height: 24px;
+        gap: 1px;
+        margin-top: 4px;
+    }
+    
+    #currentScoreValue {
+        font-size: 1.6rem;
+    }
+    
+    .word-rank {
+        font-size: 0.85rem;
     }
 }
