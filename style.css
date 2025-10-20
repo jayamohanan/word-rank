@@ -1,5 +1,5 @@
 /* DEBUG COLORS FOR GAME PAGE LAYOUT VISUALIZATION */
-#gamePage > .top-bar-area {
+/* #gamePage > .top-bar-area {
     background: #ffe4e1 !important;
 }
 #gamePage > .progress-area {
@@ -13,7 +13,7 @@
 }
 #gamePage{
     background: #2d38fd !important;
-}
+} */
 
 /* .shake {
     animation: shake 0.16s cubic-bezier(.36,.07,.19,.97) both;
