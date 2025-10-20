@@ -766,21 +766,41 @@ footer {
 }
 
 /* Home Page Styles */
+/* Home Page Layout - Similar to Game Scene */
 .home-page {
     display: flex;
     flex-direction: column;
-    min-height: 100%;
-    height: 100%;
+    flex: 1;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Home Top Bar Area - Matches game scene top bar */
+.home-top-bar-area {
+    flex: 0 0 auto;
+    min-height: 40px;
+    display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0;
+    padding: 8px 15px;
+    flex-shrink: 0;
+}
+
+/* Home Content Area - Grows to fill space */
+.home-content {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    overflow-y: auto;
+    min-height: 0;
 }
 
 .home-header {
     text-align: center;
-    margin-top: 40px;
-    margin-bottom: 30px;
+    margin-bottom: auto;
     flex-shrink: 0;
+    padding-top: 15px;
 }
 
 .home-header h1 {
@@ -805,8 +825,8 @@ footer {
     gap: 20px;
     max-width: 340px;
     width: 100%;
-    margin: 40px auto 60px auto;
     padding: 0 20px;
+    margin: auto auto 30px auto;
 }
 
 .mode-btn {
@@ -973,6 +993,7 @@ footer {
         bottom: 0;
     }
     
+    /* Game Scene */
     .top-bar-area {
         min-height: 36px;
         padding: 6px 10px;
@@ -990,6 +1011,24 @@ footer {
     .feedback-area {
         min-height: 90px;
         padding: 10px 15px 15px;
+    }
+    
+    /* Home Page */
+    .home-top-bar-area {
+        min-height: 36px;
+        padding: 6px 10px;
+    }
+    
+    .home-content {
+        padding: 15px;
+    }
+    
+    .home-header {
+        padding-top: 10px;
+    }
+    
+    .home-menu {
+        margin-bottom: 25px;
     }
 }
 
@@ -1045,9 +1084,18 @@ footer {
     }
     
     /* Home Page Adjustments */
+    .home-top-bar-area {
+        min-height: 36px;
+        padding: 6px 10px;
+    }
+    
+    .home-content {
+        padding: 15px;
+    }
+    
     .home-header {
-        margin-top: 20px;
-        margin-bottom: 15px;
+        padding-top: 8px;
+        margin-bottom: auto;
     }
     
     .home-header h1 {
@@ -1061,8 +1109,8 @@ footer {
     
     .home-menu {
         gap: 15px;
-        margin: 20px auto 30px auto;
         padding: 0 15px;
+        margin-bottom: 20px;
     }
     
     .mode-btn {
@@ -1160,9 +1208,18 @@ footer {
     }
     
     /* Home Page - more compact */
+    .home-top-bar-area {
+        min-height: 32px;
+        padding: 4px 8px;
+    }
+    
+    .home-content {
+        padding: 12px;
+    }
+    
     .home-header {
-        margin-top: 15px;
-        margin-bottom: 12px;
+        padding-top: 6px;
+        margin-bottom: auto;
     }
     
     .home-header h1 {
@@ -1176,8 +1233,8 @@ footer {
     
     .home-menu {
         gap: 12px;
-        margin: 15px auto 20px auto;
         padding: 0 12px;
+        margin-bottom: 15px;
     }
     
     .mode-btn {
