@@ -362,37 +362,45 @@
     box-sizing: border-box;
 }
 
+html {
+    height: 100%;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100svh;
-    height: 100svh;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 0;
+    margin: 0;
+    min-height: 100%;
     overflow: hidden;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
 }
-
 
 .container {
     background: white;
     border-radius: 20px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    aspect-ratio: 9 / 16;
     width: 100%;
     max-width: 400px;
-    min-width: 240px;
-    min-height: 427px; /* 240 * 16 / 9 = 427 */
-    max-height: 711px; /* 400 * 16 / 9 = 711 */
-    height: auto;
-    padding: 30px 30px;
+    min-width: 280px;
+    padding: 30px;
     text-align: center;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    overflow-y: auto;
     box-sizing: border-box;
+    position: relative;
+    /* Use absolute positioning to fill viewport on mobile, constrained size on desktop */
+    max-height: 90vh;
+    height: 90vh;
+    overflow: hidden;
 }
 
 header h1 {
@@ -635,60 +643,65 @@ footer {
 }
 
 /* ============================================
-   GAME VIEWPORT - FIXED VERTICAL LAYOUT
+   GAME VIEWPORT - PURE FLEXBOX RESPONSIVE LAYOUT
+   No vh/svh units, no explicit heights - fully responsive!
    ============================================ */
 
 .game-viewport {
     display: flex;
     flex-direction: column;
-    height: 100svh; /* Use svh for better mobile compatibility */
+    flex: 1;
     width: 100%;
     overflow: hidden;
+    position: relative;
 }
 
-/* TOP BAR AREA - Fixed 6% of viewport */
+/* TOP BAR AREA - 6% of available space */
 .top-bar-area {
-    flex: 0 0 6%;
+    flex: 0 0 auto;
+    min-height: 40px;
     display: flex;
     align-items: center;
-    padding: 0 15px;
-    overflow: hidden;
+    padding: 8px 15px;
+    flex-shrink: 0;
 }
 
-/* PROGRESS AREA - Fixed 17% of viewport (always reserved, even when empty) */
+/* PROGRESS AREA - 17% of available space, ALWAYS reserved even when empty */
 .progress-area {
-    flex: 0 0 17%;
+    flex: 0 0 auto;
+    min-height: 80px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 5px 15px;
-    overflow: hidden;
-    /* Space is ALWAYS reserved by flex: 0 0 17% - no pixels needed! */
+    padding: 8px 15px;
+    flex-shrink: 0;
 }
 
-/* MAIN GAME AREA - Fixed 55% of viewport */
+/* MAIN GAME AREA - Grows to fill remaining space (55% target) */
 .main-game-area {
-    flex: 0 0 55%;
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 15px 20px;
     overflow-y: auto;
+    min-height: 0; /* Critical for flex scrolling */
 }
 
-/* FEEDBACK AREA - Fixed 22% of viewport */
+/* FEEDBACK AREA - 22% of available space */
 .feedback-area {
-    flex: 0 0 22%;
+    flex: 0 0 auto;
+    min-height: 100px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    padding: 10px 20px 20px;
+    padding: 15px 20px 20px;
     gap: 10px;
-    overflow: hidden;
+    flex-shrink: 0;
 }
 
 /* ============================================
@@ -708,8 +721,9 @@ footer {
 .instructions {
     color: #666;
     font-size: 1rem;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     text-align: center;
+    flex-shrink: 0;
 }
 
 /* Word tiles container */
@@ -918,48 +932,70 @@ footer {
     }
 
     .container {
-        padding: 20px 20px 20px 20px;
-        min-height: 100svh;
-        height: 100svh;
-        max-height: 100svh;
-        width: 100vw;
-        max-width: 100vw;
-        aspect-ratio: auto;
+        max-width: 100%;
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
         border-radius: 0;
-        overflow-y: auto;
-        overflow-x: hidden;
-        box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
-        /* Ensure smooth scrolling */
-        -webkit-overflow-scrolling: touch;
+        padding: 15px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
     }
-
-    /* All child elements inherit desktop styles */
+    
+    .top-bar-area {
+        min-height: 36px;
+        padding: 6px 10px;
+    }
+    
+    .progress-area {
+        min-height: 70px;
+        padding: 6px 10px;
+    }
+    
+    .main-game-area {
+        padding: 10px 15px;
+    }
+    
+    .feedback-area {
+        min-height: 90px;
+        padding: 10px 15px 15px;
+    }
 }
 
 @media (max-width: 400px) {
-    body {
-        padding: 0px;
-    }
-
     .container {
-        padding: 20px 20px 20px 20px;
-        min-height: 100svh;
-        height: 100svh;
-        max-height: 100svh;
-        width: 100vw;
-        max-width: 100vw;
-        aspect-ratio: auto;
-        border-radius: 0;
-        overflow-y: auto;
-        overflow-x: hidden;
-        box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
-        /* Ensure smooth scrolling */
-        -webkit-overflow-scrolling: touch;
+        padding: 12px;
     }
-
-    /* All child elements inherit desktop styles */
+    
+    .top-bar-area {
+        min-height: 32px;
+        padding: 4px 8px;
+    }
+    
+    .progress-area {
+        min-height: 60px;
+        padding: 4px 8px;
+    }
+    
+    .main-game-area {
+        padding: 8px 12px;
+    }
+    
+    .feedback-area {
+        min-height: 80px;
+        padding: 8px 12px 12px;
+    }
+    
+    .word-tile {
+        font-size: 1.3rem;
+        padding: 14px 16px;
+        min-height: 44px;
+    }
+    
+    .word-text {
+        font-size: 1.6rem;
+    }
 }
