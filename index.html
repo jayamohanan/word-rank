@@ -47,6 +47,12 @@
                     <button class="home-btn" aria-label="Home" id="homeBtn">
                         <span class="home-icon">🏠</span>
                     </button>
+                    <button class="device-info-btn" aria-label="Device Info" id="deviceInfoBtn" style="background:#eef2ff;border:none;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(102,126,234,0.08);margin-left:8px;cursor:pointer;">
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="5" y="2" width="12" height="18" rx="3" stroke="#667eea" stroke-width="2" fill="none"/>
+                            <circle cx="11" cy="17" r="1" fill="#667eea"/>
+                        </svg>
+                    </button>
                     <div class="top-bar-right">
                         <button class="sound-btn" aria-label="Toggle Sound" id="soundBtn">
                             <span class="sound-icon">
@@ -134,7 +140,7 @@
     </p>
 
     <span style="color:#555; font-size:0.98em;">
-        Below is a sample of the first 200 words and their ranks. Scroll to see more! javascript:alert(window.screen.width * window.devicePixelRatio + " × " + window.screen.height * window.devicePixelRatio)
+        Below is a sample of the first 200 words and their ranks. Scroll to see more! 
 
     </span>
 </div>
@@ -161,6 +167,15 @@
                 <div id="summaryButtons">
                     <button id="summaryCloseBtn" style="margin-top:18px;padding:10px 30px;border-radius:8px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;font-weight:bold;border:none;cursor:pointer;">Close</button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Device Info Popup Modal -->
+        <div id="deviceInfoModal" class="modal" style="display:none;">
+            <div class="modal-content" style="max-width:340px;">
+                <span id="closeDeviceInfo" class="close">&times;</span>
+                <h2 style="margin-bottom:10px;">Device Info</h2>
+                <div id="deviceInfoContent" style="font-size:1rem;line-height:1.5;color:#333;"></div>
             </div>
         </div>
         </div>

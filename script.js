@@ -901,6 +901,56 @@ window.addEventListener('click', function(e) {
     }
 });
 
+// Device Info Popup Logic
+const deviceInfoBtn = document.getElementById('deviceInfoBtn');
+const deviceInfoModal = document.getElementById('deviceInfoModal');
+const closeDeviceInfo = document.getElementById('closeDeviceInfo');
+const deviceInfoContent = document.getElementById('deviceInfoContent');
+
+function getDeviceInfo() {
+    const screenW = window.screen.width;
+    const screenH = window.screen.height;
+    const cssW = window.innerWidth;
+    const cssH = window.innerHeight;
+    const dpr = window.devicePixelRatio;
+    let category = '';
+    if (cssW <= 400) {
+        category = 'Matches 400px media query';
+    } else if (cssW <= 600) {
+        category = 'Matches 600px media query';
+    } else {
+        category = 'Above 600px media query';
+    }
+    let visualViewportInfo = '';
+    if (window.visualViewport) {
+        visualViewportInfo = `<strong>Visual Viewport:</strong> ${Math.round(window.visualViewport.width)} × ${Math.round(window.visualViewport.height)} px<br>`;
+    } else {
+        visualViewportInfo = '<strong>Visual Viewport:</strong> Not supported<br>';
+    }
+    return `
+        <strong>Screen Resolution:</strong> ${screenW} × ${screenH} px<br>
+        <strong>CSS Resolution:</strong> ${cssW} × ${cssH} px<br>
+        ${visualViewportInfo}
+        <strong>Device Pixel Ratio:</strong> ${dpr}<br>
+        <strong>Media Query Category:</strong> ${category}
+    `;
+}
+
+deviceInfoBtn.addEventListener('click', function() {
+    deviceInfoContent.innerHTML = getDeviceInfo();
+    deviceInfoModal.style.display = 'block';
+});
+
+closeDeviceInfo.addEventListener('click', function() {
+    deviceInfoModal.style.display = 'none';
+});
+
+window.addEventListener('click', function(e) {
+    if (e.target === deviceInfoModal) {
+        deviceInfoModal.style.display = 'none';
+    }
+});
+
 // Load word data on startup
 loadWordData();
 
