@@ -641,35 +641,36 @@ footer {
 .game-viewport {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: 100svh; /* Use svh for better mobile compatibility */
     width: 100%;
     overflow: hidden;
 }
 
-/* TOP BAR AREA - 6% of viewport */
+/* TOP BAR AREA - Fixed 6% of viewport */
 .top-bar-area {
     flex: 0 0 6%;
-    height: 6vh;
     display: flex;
     align-items: center;
     padding: 0 15px;
+    overflow: hidden;
 }
 
-/* PROGRESS AREA - 15% of viewport */
+/* PROGRESS AREA - Fixed 17% of viewport (always reserved, even when empty) */
 .progress-area {
-    flex: 0 0 15%;
-    height: 15vh;
+    flex: 0 0 17%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 8px;
     padding: 5px 15px;
+    overflow: hidden;
+    /* Space is ALWAYS reserved by flex: 0 0 17% - no pixels needed! */
 }
 
-/* MAIN GAME AREA - Takes remaining space, minimum 55% */
+/* MAIN GAME AREA - Fixed 55% of viewport */
 .main-game-area {
-    flex: 1 1 60%;
+    flex: 0 0 55%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -678,15 +679,16 @@ footer {
     overflow-y: auto;
 }
 
-/* FEEDBACK AREA - 22% of viewport */
+/* FEEDBACK AREA - Fixed 22% of viewport */
 .feedback-area {
     flex: 0 0 22%;
-    height: 22vh;
+    display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     padding: 10px 20px 20px;
     gap: 10px;
+    overflow: hidden;
 }
 
 /* ============================================
