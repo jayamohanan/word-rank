@@ -646,11 +646,10 @@ footer {
     overflow: hidden;
 }
 
-/* TOP BAR AREA - 8% of viewport */
+/* TOP BAR AREA - 6% of viewport */
 .top-bar-area {
-    flex: 0 0 8%;
-    min-height: 50px;
-    max-height: 70px;
+    flex: 0 0 6%;
+    height: 6vh;
     display: flex;
     align-items: center;
     padding: 0 15px;
@@ -659,8 +658,7 @@ footer {
 /* PROGRESS AREA - 15% of viewport */
 .progress-area {
     flex: 0 0 15%;
-    min-height: 80px;
-    max-height: 200px;
+    height: 15vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -683,9 +681,7 @@ footer {
 /* FEEDBACK AREA - 22% of viewport */
 .feedback-area {
     flex: 0 0 22%;
-    min-height: 100px;
-    max-height: 180px;
-    display: flex;
+    height: 22vh;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
