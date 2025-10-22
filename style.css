@@ -1274,3 +1274,258 @@ footer {
         font-size: 0.85rem;
     }
 }
+
+/* ============================================
+   BOARD MODE STYLES
+   ============================================ */
+
+.board-game-area {
+    padding: 10px 15px;
+    overflow-y: auto;
+}
+
+.board-instructions {
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+    color: #666;
+}
+
+/* Board Grid - 30 words in 3 rows */
+.board-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 8px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.board-tile {
+    background: #fff;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 8px 4px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    word-wrap: break-word;
+    min-height: 50px;
+    position: relative;
+}
+
+.board-tile:hover {
+    transform: translateY(-3px);
+    border-color: #667eea;
+    box-shadow: 0 4px 10px rgba(102, 126, 234, 0.2);
+}
+
+.board-tile.selected {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: #fff;
+    border-color: #f5576c;
+}
+
+.board-tile.cleared {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0);
+}
+
+.board-tile.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Board Slots Area */
+.board-slots-area {
+    padding: 15px 20px;
+    min-height: 140px;
+    gap: 8px;
+}
+
+.board-slots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.slot-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    max-width: 160px;
+}
+
+.slot-label {
+    font-size: 0.75rem;
+    color: #888;
+    font-weight: 600;
+    text-align: center;
+}
+
+.board-slot {
+    width: 100%;
+    min-height: 60px;
+    background: #f5f5f5;
+    border: 3px dashed #ccc;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    transition: all 0.3s ease;
+}
+
+.board-slot.filled {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: 3px solid #667eea;
+    color: #fff;
+}
+
+.board-slot .slot-text {
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.board-slot.filled .slot-text {
+    color: #fff;
+}
+
+.board-feedback {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    min-height: 30px;
+}
+
+.board-feedback.correct {
+    color: #00c851;
+}
+
+.board-feedback.incorrect {
+    color: #ff4444;
+}
+
+/* Responsive adjustments for Board Mode */
+@media (max-width: 600px) {
+    .board-grid {
+        gap: 6px;
+    }
+    
+    .board-tile {
+        font-size: 0.75rem;
+        padding: 6px 3px;
+        min-height: 45px;
+    }
+    
+    .board-slots {
+        gap: 10px;
+    }
+    
+    .slot-container {
+        max-width: 140px;
+    }
+    
+    .slot-label {
+        font-size: 0.7rem;
+    }
+    
+    .board-slot {
+        min-height: 55px;
+    }
+    
+    .board-slot .slot-text {
+        font-size: 0.9rem;
+    }
+    
+    .board-instructions {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .board-grid {
+        gap: 4px;
+    }
+    
+    .board-tile {
+        font-size: 0.7rem;
+        padding: 4px 2px;
+        min-height: 40px;
+        border-width: 1px;
+    }
+    
+    .board-slots {
+        gap: 8px;
+        flex-direction: column;
+    }
+    
+    .slot-container {
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    .slot-label {
+        font-size: 0.65rem;
+    }
+    
+    .board-slot {
+        min-height: 50px;
+    }
+    
+    .board-slot .slot-text {
+        font-size: 0.85rem;
+    }
+    
+    .board-instructions {
+        font-size: 0.8rem;
+        margin-bottom: 8px;
+    }
+    
+    .board-feedback {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 375px) {
+    .board-grid {
+        gap: 3px;
+    }
+    
+    .board-tile {
+        font-size: 0.65rem;
+        padding: 3px 2px;
+        min-height: 36px;
+    }
+    
+    .board-slots-area {
+        padding: 10px 15px;
+        min-height: 120px;
+    }
+    
+    .slot-label {
+        font-size: 0.6rem;
+    }
+    
+    .board-slot {
+        min-height: 45px;
+    }
+    
+    .board-slot .slot-text {
+        font-size: 0.8rem;
+    }
+}

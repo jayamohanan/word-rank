@@ -41,7 +41,68 @@
                     <button class="mode-btn" id="levelsBtn">Levels</button>
                     <button class="mode-btn" id="classicBtn">Classic</button>
                     <button class="mode-btn" id="freeBtn">Play</button>
+                    <button class="mode-btn" id="boardBtn">Board</button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Board Mode Page -->
+        <div id="boardPage" class="game-viewport" style="display: none;">
+            <!-- TOP BAR AREA -->
+            <div class="top-bar-area">
+                <div class="top-bar">
+                    <button class="home-btn" aria-label="Home" id="homeBtnBoard">
+                        <span class="home-icon">🏠</span>
+                    </button>
+                    <div class="top-bar-right">
+                        <button class="sound-btn" aria-label="Toggle Sound" id="soundBtnBoard">
+                            <span class="sound-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M11 5L6 9H2v6h4l5 4V5z" stroke="#667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                    <path class="sound-waves" d="M15.54 8.46a5 5 0 0 1 0 7.07M18.36 5.64a9 9 0 0 1 0 12.73" stroke="#667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                        </button>
+                        <button class="info-btn" aria-label="Info" id="infoBtnBoard">
+                            <span class="info-circle">?</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROGRESS AREA -->
+            <div class="progress-area">
+                <div id="boardScore" style="font-size:1.1rem;color:#667eea;font-weight:bold;">Pairs Cleared: <span id="boardPairsCleared">0</span>/15</div>
+            </div>
+
+            <!-- MAIN BOARD AREA -->
+            <div class="main-game-area board-game-area">
+                <div class="instructions board-instructions">
+                    Pick pairs: higher rank first, lower rank second
+                </div>
+                
+                <div class="board-grid" id="boardGrid">
+                    <!-- 30 word tiles will be generated here -->
+                </div>
+            </div>
+
+            <!-- SELECTION SLOTS AREA -->
+            <div class="feedback-area board-slots-area">
+                <div class="board-slots">
+                    <div class="slot-container">
+                        <div class="slot-label">First Pick (Higher Rank)</div>
+                        <div class="board-slot" id="slot1" data-slot="1">
+                            <span class="slot-text">Empty</span>
+                        </div>
+                    </div>
+                    <div class="slot-container">
+                        <div class="slot-label">Second Pick (Lower Rank)</div>
+                        <div class="board-slot" id="slot2" data-slot="2">
+                            <span class="slot-text">Empty</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="board-feedback" id="boardFeedback"></div>
             </div>
         </div>
 

@@ -797,11 +797,216 @@ function showSummaryModal() {
     summaryModal.style.display = 'flex';
 }
 
+// ============================================
+// BOARD MODE LOGIC
+// ============================================
+const boardPage = document.getElementById('boardPage');
+const boardBtn = document.getElementById('boardBtn');
+const boardGrid = document.getElementById('boardGrid');
+const slot1 = document.getElementById('slot1');
+const slot2 = document.getElementById('slot2');
+const boardFeedback = document.getElementById('boardFeedback');
+const boardPairsCleared = document.getElementById('boardPairsCleared');
+const homeBtnBoard = document.getElementById('homeBtnBoard');
+const soundBtnBoard = document.getElementById('soundBtnBoard');
+const infoBtnBoard = document.getElementById('infoBtnBoard');
+
+let boardWords = [];
+let selectedSlot = null; // null, 1, or 2
+let slot1Word = null;
+let slot2Word = null;
+let pairsCleared = 0;
+
+async function startBoardMode() {
+    // Load word data if not already loaded
+    if (wordsData.length === 0) {
+        try {
+            const response = await fetch('word-rank.json');
+            wordsData = await response.json();
+            console.log(`Loaded ${wordsData.length} words for Board mode`);
+        } catch (error) {
+            console.error('Error loading word data:', error);
+            return;
+        }
+    }
+    
+    // Initialize audio
+    initAudio();
+    
+    // Hide home page, show board page
+    homePage.style.display = 'none';
+    gamePage.style.display = 'none';
+    boardPage.style.display = 'flex';
+    
+    // Close info modal if open
+    if (infoModal) {
+        infoModal.style.display = 'none';
+    }
+    
+    // Initialize board
+    initializeBoard();
+}
+
+function initializeBoard() {
+    // Select 30 random words from the dataset
+    const shuffled = [...wordsData].sort(() => Math.random() - 0.5);
+    boardWords = shuffled.slice(0, 30).map(word => ({
+        lemma: word.lemma,
+        rank: word.rank,
+        cleared: false
+    }));
+    
+    // Reset game state
+    pairsCleared = 0;
+    slot1Word = null;
+    slot2Word = null;
+    selectedSlot = null;
+    boardPairsCleared.textContent = '0';
+    boardFeedback.textContent = '';
+    boardFeedback.className = 'board-feedback';
+    
+    // Clear slots
+    resetSlot(slot1);
+    resetSlot(slot2);
+    
+    // Render board
+    renderBoard();
+}
+
+function renderBoard() {
+    boardGrid.innerHTML = '';
+    
+    boardWords.forEach((word, index) => {
+        const tile = document.createElement('div');
+        tile.className = 'board-tile';
+        if (word.cleared) {
+            tile.classList.add('cleared');
+        }
+        tile.textContent = toTitleCase(word.lemma);
+        tile.dataset.index = index;
+        
+        tile.addEventListener('click', () => handleBoardTileClick(index));
+        
+        boardGrid.appendChild(tile);
+    });
+}
+
+function handleBoardTileClick(index) {
+    const word = boardWords[index];
+    
+    // Ignore if already cleared
+    if (word.cleared) return;
+    
+    // Determine which slot to fill
+    if (!slot1Word) {
+        // Fill slot 1
+        slot1Word = { ...word, index };
+        fillSlot(slot1, word.lemma);
+        markTileAsSelected(index);
+    } else if (!slot2Word) {
+        // Fill slot 2
+        slot2Word = { ...word, index };
+        fillSlot(slot2, word.lemma);
+        markTileAsSelected(index);
+        
+        // Both slots filled, validate pair
+        setTimeout(() => validatePair(), 500);
+    }
+}
+
+function markTileAsSelected(index) {
+    const tiles = boardGrid.querySelectorAll('.board-tile');
+    tiles[index].classList.add('selected');
+}
+
+function unmarkTileAsSelected(index) {
+    const tiles = boardGrid.querySelectorAll('.board-tile');
+    if (tiles[index]) {
+        tiles[index].classList.remove('selected');
+    }
+}
+
+function fillSlot(slot, word) {
+    slot.classList.add('filled');
+    slot.querySelector('.slot-text').textContent = toTitleCase(word);
+}
+
+function resetSlot(slot) {
+    slot.classList.remove('filled');
+    slot.querySelector('.slot-text').textContent = 'Empty';
+}
+
+function validatePair() {
+    // Check if first word has higher rank (lower number) than second word
+    const isValid = slot1Word.rank < slot2Word.rank;
+    
+    if (isValid) {
+        // Correct pair
+        boardFeedback.textContent = '✓ Correct! Pair cleared!';
+        boardFeedback.className = 'board-feedback correct';
+        playSound(correctSoundBuffer);
+        
+        // Mark words as cleared
+        boardWords[slot1Word.index].cleared = true;
+        boardWords[slot2Word.index].cleared = true;
+        
+        // Update score
+        pairsCleared++;
+        boardPairsCleared.textContent = pairsCleared;
+        
+        // Clear slots after delay
+        setTimeout(() => {
+            resetSlot(slot1);
+            resetSlot(slot2);
+            slot1Word = null;
+            slot2Word = null;
+            boardFeedback.textContent = '';
+            boardFeedback.className = 'board-feedback';
+            
+            // Re-render board to show cleared tiles
+            renderBoard();
+            
+            // Check if game is complete
+            if (pairsCleared === 15) {
+                setTimeout(() => {
+                    boardFeedback.textContent = '🎉 Board Complete!';
+                    boardFeedback.className = 'board-feedback correct';
+                }, 300);
+            }
+        }, 1500);
+        
+    } else {
+        // Incorrect pair
+        boardFeedback.textContent = '✗ Wrong order! Try again';
+        boardFeedback.className = 'board-feedback incorrect';
+        playSound(incorrectSoundBuffer);
+        
+        // Return tiles to board after delay
+        setTimeout(() => {
+            unmarkTileAsSelected(slot1Word.index);
+            unmarkTileAsSelected(slot2Word.index);
+            resetSlot(slot1);
+            resetSlot(slot2);
+            slot1Word = null;
+            slot2Word = null;
+            boardFeedback.textContent = '';
+            boardFeedback.className = 'board-feedback';
+        }, 1500);
+    }
+}
+
+function goHomeFromBoard() {
+    boardPage.style.display = 'none';
+    homePage.style.display = 'flex';
+}
+
 // Event Listeners - Mode Selection
 levelsBtn.addEventListener('click', startLevelsMode);
 classicBtn.addEventListener('click', startClassicMode);
 if (freeBtn) freeBtn.addEventListener('click', startFreeMode);
+if (boardBtn) boardBtn.addEventListener('click', startBoardMode);
 homeBtn.addEventListener('click', goHome);
+if (homeBtnBoard) homeBtnBoard.addEventListener('click', goHomeFromBoard);
 
 // Event Listeners - Sound Toggle
 const soundBtn = document.getElementById('soundBtn');
@@ -811,6 +1016,9 @@ if (soundBtn) {
 }
 if (soundBtnHome) {
     soundBtnHome.addEventListener('click', toggleSound);
+}
+if (soundBtnBoard) {
+    soundBtnBoard.addEventListener('click', toggleSound);
 }
 
 // Event Listeners - Game
@@ -847,6 +1055,10 @@ if (infoBtn) {
 
 if (infoBtn2) {
     infoBtn2.addEventListener('click', openInfoModal);
+}
+
+if (infoBtnBoard) {
+    infoBtnBoard.addEventListener('click', openInfoModal);
 }
 
 if (closeModal) {
