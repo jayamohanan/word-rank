@@ -1286,12 +1286,12 @@ footer {
     flex-direction: column;
 }
 
-/* Board Grid - 30 words in 3 columns × 10 rows (portrait layout) */
+/* Board Grid - 20 words in 2 columns × 10 rows (portrait layout) */
 .board-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(10, 1fr);
-    gap: 6px;
+    gap: 8px;
     width: 100%;
     max-width: 100%;
     margin: 0 auto;
@@ -1302,9 +1302,9 @@ footer {
 .board-tile {
     background: #fff;
     border: 2px solid #e0e0e0;
-    border-radius: 6px;
-    padding: 6px 4px;
-    font-size: 0.8rem;
+    border-radius: 8px;
+    padding: 10px 8px;
+    font-size: 1rem;
     font-weight: bold;
     color: #333;
     cursor: pointer;
@@ -1344,9 +1344,9 @@ footer {
 
 /* Board Slots Area */
 .board-slots-area {
-    padding: 10px 12px;
-    min-height: 120px;
-    gap: 6px;
+    padding: 12px 15px;
+    min-height: 140px;
+    gap: 8px;
     flex-shrink: 0;
 }
 
@@ -1354,22 +1354,22 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 12px;
+    gap: 15px;
     width: 100%;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 }
 
 .slot-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
     flex: 1;
-    max-width: 150px;
+    max-width: 170px;
 }
 
 .slot-label {
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     color: #888;
     font-weight: 600;
     text-align: center;
@@ -1377,15 +1377,15 @@ footer {
 
 .board-slot {
     width: 100%;
-    min-height: 50px;
-    max-height: 50px;
+    min-height: 60px;
+    max-height: 60px;
     background: #f5f5f5;
     border: 2px dashed #ccc;
-    border-radius: 10px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 6px;
+    padding: 8px;
     transition: all 0.3s ease;
 }
 
@@ -1396,7 +1396,7 @@ footer {
 }
 
 .board-slot .slot-text {
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: bold;
     text-align: center;
 }
@@ -1406,7 +1406,7 @@ footer {
 }
 
 .board-feedback {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-weight: bold;
     text-align: center;
     min-height: 30px;
@@ -1423,73 +1423,73 @@ footer {
 /* Responsive adjustments for Board Mode */
 @media (max-width: 600px) {
     .board-game-area {
-        padding: 6px 10px;
+        padding: 8px 12px;
     }
     
     .board-grid {
-        gap: 5px;
+        gap: 7px;
     }
     
     .board-tile {
-        font-size: 0.72rem;
-        padding: 5px 3px;
-        border-width: 1px;
+        font-size: 0.9rem;
+        padding: 8px 6px;
+        border-width: 2px;
     }
     
     .board-slots-area {
-        padding: 8px 10px;
-        min-height: 110px;
+        padding: 10px 12px;
+        min-height: 130px;
     }
     
     .board-slots {
-        gap: 10px;
+        gap: 12px;
     }
     
     .slot-container {
-        max-width: 130px;
+        max-width: 150px;
     }
     
     .slot-label {
-        font-size: 0.65rem;
+        font-size: 0.75rem;
     }
     
     .board-slot {
-        min-height: 48px;
-        max-height: 48px;
+        min-height: 55px;
+        max-height: 55px;
     }
     
     .board-slot .slot-text {
-        font-size: 0.85rem;
+        font-size: 1rem;
     }
     
     .board-feedback {
-        font-size: 1rem;
+        font-size: 1.15rem;
     }
 }
 
 @media (max-width: 400px) {
     .board-game-area {
-        padding: 5px 8px;
+        padding: 6px 10px;
     }
     
     .board-grid {
-        gap: 4px;
+        gap: 6px;
     }
     
     .board-tile {
-        font-size: 0.65rem;
-        padding: 4px 2px;
-        border-width: 1px;
-        border-radius: 4px;
+        font-size: 0.8rem;
+        padding: 7px 5px;
+        border-width: 2px;
+        border-radius: 6px;
     }
     
     .board-slots-area {
-        padding: 8px 8px;
-        min-height: 130px;
+        padding: 10px 10px;
+        min-height: 140px;
     }
     
     .board-slots {
-        gap: 8px;
+        gap: 10px;
         flex-direction: column;
     }
     
@@ -1499,61 +1499,61 @@ footer {
     }
     
     .slot-label {
-        font-size: 0.6rem;
+        font-size: 0.7rem;
     }
     
     .board-slot {
-        min-height: 42px;
-        max-height: 42px;
-        padding: 5px;
+        min-height: 50px;
+        max-height: 50px;
+        padding: 6px;
     }
     
     .board-slot .slot-text {
-        font-size: 0.8rem;
+        font-size: 0.95rem;
     }
     
     .board-feedback {
-        font-size: 0.95rem;
-        min-height: 24px;
+        font-size: 1.05rem;
+        min-height: 26px;
     }
 }
 
 @media (max-width: 375px) {
     .board-game-area {
-        padding: 4px 6px;
+        padding: 5px 8px;
     }
     
     .board-grid {
-        gap: 3px;
+        gap: 5px;
     }
     
     .board-tile {
-        font-size: 0.6rem;
-        padding: 3px 2px;
-        border-radius: 3px;
+        font-size: 0.75rem;
+        padding: 6px 4px;
+        border-radius: 5px;
     }
     
     .board-slots-area {
-        padding: 8px 6px;
-        min-height: 125px;
+        padding: 10px 8px;
+        min-height: 135px;
     }
     
     .slot-label {
-        font-size: 0.55rem;
+        font-size: 0.65rem;
     }
     
     .board-slot {
-        min-height: 40px;
-        max-height: 40px;
-        padding: 4px;
+        min-height: 48px;
+        max-height: 48px;
+        padding: 5px;
     }
     
     .board-slot .slot-text {
-        font-size: 0.75rem;
+        font-size: 0.9rem;
     }
     
     .board-feedback {
-        font-size: 0.9rem;
-        min-height: 22px;
+        font-size: 1rem;
+        min-height: 24px;
     }
 }

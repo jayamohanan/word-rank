@@ -848,9 +848,9 @@ async function startBoardMode() {
 }
 
 function initializeBoard() {
-    // Select 30 random words from the dataset
+    // Select 20 random words from the dataset
     const shuffled = [...wordsData].sort(() => Math.random() - 0.5);
-    boardWords = shuffled.slice(0, 30).map(word => ({
+    boardWords = shuffled.slice(0, 20).map(word => ({
         lemma: word.lemma,
         rank: word.rank,
         cleared: false
@@ -989,7 +989,7 @@ function validatePair() {
             renderBoard();
             
             // Check if game is complete
-            if (pairsCleared === 15) {
+            if (pairsCleared === 10) {
                 setTimeout(() => {
                     boardFeedback.textContent = '🎉 Board Complete!';
                     boardFeedback.className = 'board-feedback correct';
