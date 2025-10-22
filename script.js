@@ -897,17 +897,23 @@ function handleBoardTileClick(index) {
     // Ignore if already cleared
     if (word.cleared) return;
     
+    // Ignore if already selected in a slot
+    if (slot1Word && slot1Word.index === index) return;
+    if (slot2Word && slot2Word.index === index) return;
+    
     // Determine which slot to fill
     if (!slot1Word) {
         // Fill slot 1
         slot1Word = { ...word, index };
         fillSlot(slot1, word.lemma);
         markTileAsSelected(index);
+        disableTile(index);
     } else if (!slot2Word) {
         // Fill slot 2
         slot2Word = { ...word, index };
         fillSlot(slot2, word.lemma);
         markTileAsSelected(index);
+        disableTile(index);
         
         // Both slots filled, validate pair
         setTimeout(() => validatePair(), 500);
@@ -923,6 +929,22 @@ function unmarkTileAsSelected(index) {
     const tiles = boardGrid.querySelectorAll('.board-tile');
     if (tiles[index]) {
         tiles[index].classList.remove('selected');
+    }
+}
+
+function disableTile(index) {
+    const tiles = boardGrid.querySelectorAll('.board-tile');
+    if (tiles[index]) {
+        tiles[index].classList.add('disabled');
+        tiles[index].style.pointerEvents = 'none';
+    }
+}
+
+function enableTile(index) {
+    const tiles = boardGrid.querySelectorAll('.board-tile');
+    if (tiles[index]) {
+        tiles[index].classList.remove('disabled');
+        tiles[index].style.pointerEvents = 'auto';
     }
 }
 
@@ -985,6 +1007,8 @@ function validatePair() {
         setTimeout(() => {
             unmarkTileAsSelected(slot1Word.index);
             unmarkTileAsSelected(slot2Word.index);
+            enableTile(slot1Word.index);
+            enableTile(slot2Word.index);
             resetSlot(slot1);
             resetSlot(slot2);
             slot1Word = null;
