@@ -1286,13 +1286,6 @@ footer {
     flex-direction: column;
 }
 
-.board-instructions {
-    font-size: 0.85rem;
-    margin-bottom: 8px;
-    color: #666;
-    flex-shrink: 0;
-}
-
 /* Board Grid - 30 words in 3 columns × 10 rows (portrait layout) */
 .board-grid {
     display: grid;
@@ -1352,8 +1345,7 @@ footer {
 /* Board Slots Area */
 .board-slots-area {
     padding: 10px 12px;
-    min-height: 100px;
-    max-height: 110px;
+    min-height: 120px;
     gap: 6px;
     flex-shrink: 0;
 }
@@ -1446,8 +1438,7 @@ footer {
     
     .board-slots-area {
         padding: 8px 10px;
-        min-height: 95px;
-        max-height: 100px;
+        min-height: 110px;
     }
     
     .board-slots {
@@ -1469,11 +1460,6 @@ footer {
     
     .board-slot .slot-text {
         font-size: 0.85rem;
-    }
-    
-    .board-instructions {
-        font-size: 0.8rem;
-        margin-bottom: 6px;
     }
     
     .board-feedback {
@@ -1498,9 +1484,8 @@ footer {
     }
     
     .board-slots-area {
-        padding: 6px 8px;
-        min-height: 85px;
-        max-height: 90px;
+        padding: 8px 8px;
+        min-height: 130px;
     }
     
     .board-slots {
@@ -1527,13 +1512,9 @@ footer {
         font-size: 0.8rem;
     }
     
-    .board-instructions {
-        font-size: 0.75rem;
-        margin-bottom: 5px;
-    }
-    
     .board-feedback {
         font-size: 0.95rem;
+        min-height: 24px;
     }
 }
 
@@ -1553,9 +1534,8 @@ footer {
     }
     
     .board-slots-area {
-        padding: 5px 6px;
-        min-height: 80px;
-        max-height: 85px;
+        padding: 8px 6px;
+        min-height: 125px;
     }
     
     .slot-label {
@@ -1572,12 +1552,8 @@ footer {
         font-size: 0.75rem;
     }
     
-    .board-instructions {
-        font-size: 0.7rem;
-        margin-bottom: 4px;
-    }
-    
     .board-feedback {
         font-size: 0.9rem;
+        min-height: 22px;
     }
 }
